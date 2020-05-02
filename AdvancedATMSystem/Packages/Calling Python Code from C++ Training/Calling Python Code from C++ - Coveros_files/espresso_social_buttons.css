@@ -1,0 +1,21 @@
+
+.espresso-social-button-dv {
+	display: inline-block;
+	float: left;
+	vertical-align: middle;
+}
+.espresso-social-button-dv div {
+	display: inline-block;
+	float: left;
+	vertical-align: middle;
+	line-height : 1em;
+}
+.espresso-social-button-dv + .espresso-social-button-dv {
+	/*margin-left: 1em;*/
+}
+#espresso-social-buttons-dv-facebook {
+	margin-top: 5px;
+}
+#espresso-social-buttons-dv-g-plusone {
+	margin-top: 3px;
+}

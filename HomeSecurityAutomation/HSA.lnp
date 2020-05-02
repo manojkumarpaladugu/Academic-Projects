@@ -1,0 +1,8 @@
+"delay_1ms.obj",
+"DS1621.obj",
+"hsa.obj",
+"serial_com.obj",
+"lcd.obj",
+"i2c.obj" 
+TO "HSA" 
+RAMSIZE(256) 

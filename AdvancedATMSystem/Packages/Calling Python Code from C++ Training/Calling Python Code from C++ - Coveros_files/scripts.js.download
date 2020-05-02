@@ -1,0 +1,43 @@
+jQuery(document).ready(function($)
+	{
+		
+		
+		$(".accordions-head").click(function () {
+			
+			toogle_text = $(this).attr('toogle-text');
+			main_text = $(this).attr('main-text');	
+					
+			//console.log(toogle_text);
+			//console.log(main_text);			
+			
+			if($(this).hasClass('ui-state-active')){
+				
+				if( main_text != null  && main_text != ''){
+					
+					$(this).children('.accordions-head-title').html(main_text);
+
+					}
+
+				}
+			else{
+				
+				if( toogle_text != null && toogle_text != ''){
+
+					$(this).children('.accordions-head-title').html(toogle_text);
+					
+					}
+
+
+				
+				}
+
+			
+		});
+
+		
+		
+	});	
+
+
+
+

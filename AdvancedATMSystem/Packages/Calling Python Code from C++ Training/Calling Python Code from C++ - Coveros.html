@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)https://www.coveros.com/calling-python-code-from-c/ -->
+<html lang="en-US" prefix="og: http://ogp.me/ns#"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>Calling Python Code from C++ - Coveros</title>
+
+<!-- This site is optimized with the Yoast SEO plugin v8.0 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="https://www.coveros.com/calling-python-code-from-c/">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Calling Python Code from C++ - Coveros">
+<meta property="og:description" content="When developing an application in programming language A you may discover that certain parts of the program are easier to code using a different language B.  At this point you have one of three choices: Write the application entirely in language A. Write the application entirely in language B. Write most of the application using …">
+<meta property="og:url" content="https://www.coveros.com/calling-python-code-from-c/">
+<meta property="og:site_name" content="Coveros">
+<meta property="article:publisher" content="https://www.facebook.com/coveros/">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="evergreen">
+<meta property="article:tag" content="Microsoft Detours">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Visual Studio 2010">
+<meta property="article:section" content="Blogs">
+<meta property="article:published_time" content="2012-12-08T18:40:22-05:00">
+<meta property="article:modified_time" content="2018-02-25T18:33:12-05:00">
+<meta property="og:updated_time" content="2018-02-25T18:33:12-05:00">
+<meta property="og:image" content="https://www.coveros.com/wp-content/uploads/2013/03/Code.jpg">
+<meta property="og:image:secure_url" content="https://www.coveros.com/wp-content/uploads/2013/03/Code.jpg">
+<meta property="og:image:width" content="1920">
+<meta property="og:image:height" content="1280">
+<meta property="og:image:alt" content="Code">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:description" content="When developing an application in programming language A you may discover that certain parts of the program are easier to code using a different language B.  At this point you have one of three choices: Write the application entirely in language A. Write the application entirely in language B. Write most of the application using […]">
+<meta name="twitter:title" content="Calling Python Code from C++ - Coveros">
+<meta name="twitter:site" content="@coveros">
+<meta name="twitter:image" content="https://www.coveros.com/wp-content/uploads/2013/03/Code.jpg">
+<meta name="twitter:creator" content="@coveros">
+<div class="fit-vids-style" id="fit-vids-style" style="display: none;">­<style>.fluid-width-video-wrapper{width:100%;position:relative;padding:0;}.fluid-width-video-wrapper iframe,.fluid-width-video-wrapper object,.fluid-width-video-wrapper embed {position:absolute;top:0;left:0;width:100%;height:100%;}</style></div><script type="text/javascript" id="www-widgetapi-script" src="./Calling Python Code from C++ - Coveros_files/www-widgetapi.js.download" async=""></script><script type="text/javascript" async="" src="./Calling Python Code from C++ - Coveros_files/linkid.js.download"></script><script async="" src="./Calling Python Code from C++ - Coveros_files/analytics.js.download"></script><script type="application/ld+json">{"@context":"https:\/\/schema.org","@type":"Organization","url":"https:\/\/www.coveros.com\/","sameAs":["https:\/\/www.facebook.com\/coveros\/","https:\/\/www.linkedin.com\/company\/213935","https:\/\/www.youtube.com\/user\/CoverosInc","https:\/\/twitter.com\/coveros"],"@id":"https:\/\/www.coveros.com\/#organization","name":"Coveros, Inc.","logo":"https:\/\/www.coveros.com\/wp-content\/uploads\/2016\/06\/Coveros-Logo-81.png"}</script>
+<!-- / Yoast SEO plugin. -->
+
+<link rel="dns-prefetch" href="https://s0.wp.com/">
+<link rel="dns-prefetch" href="https://secure.gravatar.com/">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com/">
+<link rel="dns-prefetch" href="https://s.w.org/">
+<link rel="alternate" type="application/rss+xml" title="Coveros » Feed" href="https://www.coveros.com/feed/">
+<link rel="alternate" type="application/rss+xml" title="Coveros » Comments Feed" href="https://www.coveros.com/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Coveros » Calling Python Code from C++ Comments Feed" href="https://www.coveros.com/calling-python-code-from-c/feed/">
+<meta name="generator" content="Event Espresso Version 4.9.66.p">
+<!-- This site uses the Google Analytics by MonsterInsights plugin v7.1.0 - Using Analytics tracking - https://www.monsterinsights.com/ -->
+<script type="text/javascript" data-cfasync="false">
+	var mi_version         = '7.1.0';
+	var mi_track_user      = true;
+	var mi_no_track_reason = '';
+	
+	var disableStr = 'ga-disable-UA-9447170-1';
+
+	/* Function to detect opted out users */
+	function __gaTrackerIsOptedOut() {
+		return document.cookie.indexOf(disableStr + '=true') > -1;
+	}
+
+	/* Disable tracking if the opt-out cookie exists. */
+	if ( __gaTrackerIsOptedOut() ) {
+		window[disableStr] = true;
+	}
+
+	/* Opt-out function */
+	function __gaTrackerOptout() {
+	  document.cookie = disableStr + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+	  window[disableStr] = true;
+	}
+	
+	if ( mi_track_user ) {
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');
+
+		__gaTracker('create', 'UA-9447170-1', 'auto');
+		__gaTracker('set', 'forceSSL', true);
+		__gaTracker('require', 'displayfeatures');
+		__gaTracker('require', 'linkid', 'linkid.js');
+		__gaTracker('send','pageview');
+	} else {
+		console.log( "" );
+		(function() {
+			/* https://developers.google.com/analytics/devguides/collection/analyticsjs/ */
+			var noopfn = function() {
+				return null;
+			};
+			var noopnullfn = function() {
+				return null;
+			};
+			var Tracker = function() {
+				return null;
+			};
+			var p = Tracker.prototype;
+			p.get = noopfn;
+			p.set = noopfn;
+			p.send = noopfn;
+			var __gaTracker = function() {
+				var len = arguments.length;
+				if ( len === 0 ) {
+					return;
+				}
+				var f = arguments[len-1];
+				if ( typeof f !== 'object' || f === null || typeof f.hitCallback !== 'function' ) {
+					console.log( 'Not running function __gaTracker(' + arguments[0] + " ....) because you are not being tracked. " + mi_no_track_reason );
+					return;
+				}
+				try {
+					f.hitCallback();
+				} catch (ex) {
+
+				}
+			};
+			__gaTracker.create = function() {
+				return new Tracker();
+			};
+			__gaTracker.getByName = noopnullfn;
+			__gaTracker.getAll = function() {
+				return [];
+			};
+			__gaTracker.remove = noopfn;
+			window['__gaTracker'] = __gaTracker;
+					})();
+		}
+</script>
+<!-- / Google Analytics by MonsterInsights -->
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/www.coveros.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.8"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55358,56760,9792,65039],[55358,56760,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script src="./Calling Python Code from C++ - Coveros_files/wp-emoji-release.min.js.download" type="text/javascript" defer=""></script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="jquery-ui-css" href="./Calling Python Code from C++ - Coveros_files/jquery-ui.css" type="text/css" media="all">
+<link rel="stylesheet" id="accordions_style-css" href="./Calling Python Code from C++ - Coveros_files/style.css" type="text/css" media="all">
+<link rel="stylesheet" id="accordions_themes.style-css" href="./Calling Python Code from C++ - Coveros_files/themes.style.css" type="text/css" media="all">
+<link rel="stylesheet" id="accordions_themes.Tabs.style-css" href="./Calling Python Code from C++ - Coveros_files/themesTabs.style.css" type="text/css" media="all">
+<link rel="stylesheet" id="font-awesome-css" href="./Calling Python Code from C++ - Coveros_files/font-awesome.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="contact-form-7-css" href="./Calling Python Code from C++ - Coveros_files/styles.css" type="text/css" media="all">
+<link rel="stylesheet" id="wpdm-bootstrap-css" href="./Calling Python Code from C++ - Coveros_files/bootstrap.css" type="text/css" media="all">
+<link rel="stylesheet" id="wpdm-front-css" href="./Calling Python Code from C++ - Coveros_files/front.css" type="text/css" media="all">
+<link rel="stylesheet" id="dashicons-css" href="./Calling Python Code from C++ - Coveros_files/dashicons.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="illdy-google-fonts-css" href="./Calling Python Code from C++ - Coveros_files/css" type="text/css" media="all">
+<link rel="stylesheet" id="bootstrap-css" href="./Calling Python Code from C++ - Coveros_files/bootstrap.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="bootstrap-theme-css" href="./Calling Python Code from C++ - Coveros_files/bootstrap-theme.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="owl-carousel-css" href="./Calling Python Code from C++ - Coveros_files/owl-carousel.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="illdy-main-css" href="./Calling Python Code from C++ - Coveros_files/main.css" type="text/css" media="all">
+<link rel="stylesheet" id="illdy-custom-css" href="./Calling Python Code from C++ - Coveros_files/custom.css" type="text/css" media="all">
+<link rel="stylesheet" id="illdy-style-css" href="./Calling Python Code from C++ - Coveros_files/style(1).css" type="text/css" media="all">
+<style id="illdy-style-inline-css" type="text/css">
+#header .top-header .header-logo:hover,
+#header .top-header .header-navigation ul li.menu-item-has-children .sub-menu li:hover > a,
+#latest-news .section-content .post .post-title:hover,
+#latest-news .section-content .post .post-button,
+#contact-us .section-content .contact-us-box .box-left,
+.recentcomments > a,
+#blog .blog-post .blog-post-title:hover,
+#blog .blog-post .blog-post-meta .post-meta-author,
+#blog .blog-post .blog-post-meta .post-meta-author .fa,
+#blog .blog-post .blog-post-meta .post-meta-time .fa,
+#blog .blog-post .blog-post-meta .post-meta-categories .fa,
+#blog .blog-post .blog-post-meta .post-meta-comments .fa,
+#blog .blog-post .blog-post-author h4,
+.widget table td#prev a,
+.widget table td#next a,
+.widget .widget-recent-post .recent-post-button,
+span.rss-date:before,
+.post-date:before,
+.blog-post-related-articles .related-post:hover .related-post-title,
+#comments #comments-list ul.comments .comment .url,
+#comments #comments-list ul.comments .comment .comment-reply-link,
+#header .bottom-header span.span-dot,
+#header .top-header .header-navigation ul li:hover a,
+input[type=submit] { color: #02869f; }
+#header .top-header .header-navigation ul li.menu-item-has-children .sub-menu li:hover > a { border-color: #02869f; }
+#header .bottom-header .header-button-two,
+#comments #respond .comment-form #input-submit,
+#latest-news .latest-news-button,
+#contact-us .section-content .wpcf7-form p .wpcf7-submit,
+#blog .blog-post .blog-post-button,
+.widget table caption,
+.widget table#wp-calendar tbody tr td a { background-color: #02869f; }
+@media only screen and (max-width: 992px) { .header-front-page nav ul.sub-menu { background-color: #02869f; } }
+a:hover,
+a:focus,
+#latest-news .section-content .post .post-button:hover,
+#latest-news .section-content .post .post-button:focus,
+.recentcomments a:hover,
+.widget:not(.widget_rss):not(.widget_recent_comments):not(.widget_recent_entries) ul li:hover:before,
+.widget:not(.widget_recent_comments) ul li:hover > a,
+.widget.widget_recent_comments ul li a:hover,
+.widget table td#prev a:hover:before,
+.widget table td#next a:hover:before,
+.widget table td#prev a:focus:before,
+.widget table td#next a:focus:before,
+.widget_categories ul li:hover,
+.widget_archive ul li:hover { color: #035359; }
+#testimonials .section-content .testimonials-carousel .carousel-testimonial .testimonial-content,
+.widget table#wp-calendar tbody tr td a:hover,
+#comments #respond .comment-form #input-submit:hover,
+input[type=submit]:hover,
+#latest-news .latest-news-button:hover,
+#contact-us .section-content .wpcf7-form p .wpcf7-submit:hover,
+#header .bottom-header .header-button-two:hover,
+#blog .blog-post .blog-post-button:hover { background-color: #035359; }
+#testimonials .section-content .testimonials-carousel .carousel-testimonial .testimonial-content:after  { border-color: #035359 transparent transparent transparent; }
+input:focus,
+input:hover,
+textarea:focus,
+textarea:hover { border-color: #035359; }
+.front-page-section .section-header .section-description,
+#header .top-header .header-navigation ul li.menu-item-has-children .sub-menu li a,
+#services .section-content .service .service-entry,
+#latest-news .section-content .post .post-entry,
+#team .section-content .person .person-content p,
+#contact-us .section-content .contact-us-box .box-right span,
+#contact-us .section-content .contact-us-box .box-right span a,
+#contact-us .section-content .contact-us-social a,
+#contact-us .section-content .wpcf7-form p .wpcf7-text,
+#footer .copyright,
+#footer .copyright a,
+.widget table tbody,
+input,
+textarea,
+.markup-format h1, 
+.markup-format h2, 
+.markup-format h3, 
+.markup-format h4, 
+.markup-format h5, 
+.markup-format h6,
+body { color: #707070; }
+#contact-us .section-content .wpcf7-form p .wpcf7-text::-webkit-input-placeholder,
+#contact-us .section-content .wpcf7-form p .wpcf7-text::-moz-placeholder,
+#contact-us .section-content .wpcf7-form p .wpcf7-text:-ms-input-placeholder,
+#contact-us .section-content .wpcf7-form p .wpcf7-text:-moz-placeholder,
+#contact-us .section-content .wpcf7-form p .wpcf7-textarea,
+#contact-us .section-content .wpcf7-form p .wpcf7-textarea::-webkit-input-placeholder,
+#contact-us .section-content .wpcf7-form p .wpcf7-textarea::-moz-placeholder,
+#contact-us .section-content .wpcf7-form p .wpcf7-textarea:-ms-input-placeholder,
+#contact-us .section-content .wpcf7-form p .wpcf7-textarea:-moz-placeholder{ color: #707070; }
+.front-page-section .section-header h3,
+#latest-news .section-content .post .post-button:active,
+#blog .blog-post .blog-post-title,
+.widget table thead th,
+#team .section-content .person .person-content h6,
+.widget_rss cite,
+.illdy_home_parallax h3 { color: #02869f; }
+</style>
+<link rel="stylesheet" id="evcal_google_fonts-css" href="./Calling Python Code from C++ - Coveros_files/css(1)" type="text/css" media="screen">
+<link rel="stylesheet" id="evcal_cal_default-css" href="./Calling Python Code from C++ - Coveros_files/eventon_styles.css" type="text/css" media="all">
+<link rel="stylesheet" id="evo_font_icons-css" href="./Calling Python Code from C++ - Coveros_files/font-awesome.css" type="text/css" media="all">
+<link rel="stylesheet" id="eventon_dynamic_styles-css" href="./Calling Python Code from C++ - Coveros_files/eventon_dynamic_styles.css" type="text/css" media="all">
+<link rel="stylesheet" id="buttons-css" href="./Calling Python Code from C++ - Coveros_files/buttons.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="mediaelement-css" href="./Calling Python Code from C++ - Coveros_files/mediaelementplayer-legacy.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-mediaelement-css" href="./Calling Python Code from C++ - Coveros_files/wp-mediaelement.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="media-views-css" href="./Calling Python Code from C++ - Coveros_files/media-views.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="imgareaselect-css" href="./Calling Python Code from C++ - Coveros_files/imgareaselect.css" type="text/css" media="all">
+<link rel="stylesheet" id="jetpack-widget-social-icons-styles-css" href="./Calling Python Code from C++ - Coveros_files/social-icons.css" type="text/css" media="all">
+<link rel="stylesheet" id="espresso_default-css" href="./Calling Python Code from C++ - Coveros_files/espresso_default.css" type="text/css" media="all">
+<link rel="stylesheet" id="espresso_multi_event_registration-css" href="./Calling Python Code from C++ - Coveros_files/multi_event_registration.css" type="text/css" media="all">
+<link rel="stylesheet" id="espresso_social_buttons-css" href="./Calling Python Code from C++ - Coveros_files/espresso_social_buttons.css" type="text/css" media="screen">
+<link rel="stylesheet" id="__EPYT__style-css" href="./Calling Python Code from C++ - Coveros_files/ytprefs.min.css" type="text/css" media="all">
+<style id="__EPYT__style-inline-css" type="text/css">
+
+                .epyt-gallery-thumb {
+                        width: 33.333%;
+                }
+                
+                         @media (min-width:0px) and (max-width: 767px) {
+                            .epyt-gallery-rowbreak {
+                                display: none;
+                            }
+                            .epyt-gallery-allthumbs[class*="epyt-cols"] .epyt-gallery-thumb {
+                                width: 100% !important;
+                            }
+                          }
+</style>
+<link rel="stylesheet" id="jetpack_css-css" href="./Calling Python Code from C++ - Coveros_files/jetpack.css" type="text/css" media="all">
+<script type="text/javascript">
+/* <![CDATA[ */
+var monsterinsights_frontend = {"js_events_tracking":"true","is_debug_mode":"false","download_extensions":"doc,exe,js,pdf,ppt,tgz,zip,xls","inbound_paths":"","home_url":"https:\/\/www.coveros.com","track_download_as":"event","internal_label":"int","hash_tracking":"false"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/frontend.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/jquery.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/jquery-migrate.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/scripts.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/bootstrap.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/front.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/chosen.jquery.min.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var userSettings = {"url":"\/","uid":"0","time":"1547887516","secure":"1"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/utils.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/moxie.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/plupload.min.js.download"></script>
+<!--[if lt IE 8]>
+<script type='text/javascript' src='https://www.coveros.com/wp-includes/js/json2.min.js?ver=2015-05-03'></script>
+<![endif]-->
+<script type="text/javascript">
+var mejsL10n = {"language":"en","strings":{"mejs.install-flash":"You are using a browser that does not have Flash player enabled or installed. Please turn on your Flash player plugin or download the latest version from https:\/\/get.adobe.com\/flashplayer\/","mejs.fullscreen-off":"Turn off Fullscreen","mejs.fullscreen-on":"Go Fullscreen","mejs.download-video":"Download Video","mejs.fullscreen":"Fullscreen","mejs.time-jump-forward":["Jump forward 1 second","Jump forward %1 seconds"],"mejs.loop":"Toggle Loop","mejs.play":"Play","mejs.pause":"Pause","mejs.close":"Close","mejs.time-slider":"Time Slider","mejs.time-help-text":"Use Left\/Right Arrow keys to advance one second, Up\/Down arrows to advance ten seconds.","mejs.time-skip-back":["Skip back 1 second","Skip back %1 seconds"],"mejs.captions-subtitles":"Captions\/Subtitles","mejs.captions-chapters":"Chapters","mejs.none":"None","mejs.mute-toggle":"Mute Toggle","mejs.volume-help-text":"Use Up\/Down Arrow keys to increase or decrease volume.","mejs.unmute":"Unmute","mejs.mute":"Mute","mejs.volume-slider":"Volume Slider","mejs.video-player":"Video Player","mejs.audio-player":"Audio Player","mejs.ad-skip":"Skip ad","mejs.ad-skip-info":["Skip in 1 second","Skip in %1 seconds"],"mejs.source-chooser":"Source Chooser","mejs.stop":"Stop","mejs.speed-rate":"Speed Rate","mejs.live-broadcast":"Live Broadcast","mejs.afrikaans":"Afrikaans","mejs.albanian":"Albanian","mejs.arabic":"Arabic","mejs.belarusian":"Belarusian","mejs.bulgarian":"Bulgarian","mejs.catalan":"Catalan","mejs.chinese":"Chinese","mejs.chinese-simplified":"Chinese (Simplified)","mejs.chinese-traditional":"Chinese (Traditional)","mejs.croatian":"Croatian","mejs.czech":"Czech","mejs.danish":"Danish","mejs.dutch":"Dutch","mejs.english":"English","mejs.estonian":"Estonian","mejs.filipino":"Filipino","mejs.finnish":"Finnish","mejs.french":"French","mejs.galician":"Galician","mejs.german":"German","mejs.greek":"Greek","mejs.haitian-creole":"Haitian Creole","mejs.hebrew":"Hebrew","mejs.hindi":"Hindi","mejs.hungarian":"Hungarian","mejs.icelandic":"Icelandic","mejs.indonesian":"Indonesian","mejs.irish":"Irish","mejs.italian":"Italian","mejs.japanese":"Japanese","mejs.korean":"Korean","mejs.latvian":"Latvian","mejs.lithuanian":"Lithuanian","mejs.macedonian":"Macedonian","mejs.malay":"Malay","mejs.maltese":"Maltese","mejs.norwegian":"Norwegian","mejs.persian":"Persian","mejs.polish":"Polish","mejs.portuguese":"Portuguese","mejs.romanian":"Romanian","mejs.russian":"Russian","mejs.serbian":"Serbian","mejs.slovak":"Slovak","mejs.slovenian":"Slovenian","mejs.spanish":"Spanish","mejs.swahili":"Swahili","mejs.swedish":"Swedish","mejs.tagalog":"Tagalog","mejs.thai":"Thai","mejs.turkish":"Turkish","mejs.ukrainian":"Ukrainian","mejs.vietnamese":"Vietnamese","mejs.welsh":"Welsh","mejs.yiddish":"Yiddish"}};
+</script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/mediaelement-and-player.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/mediaelement-migrate.min.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var _wpmejsSettings = {"pluginPath":"\/wp-includes\/js\/mediaelement\/","classPrefix":"mejs-","stretching":"responsive"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/postmessage.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/jquery.jetpack-resize.min.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var _EPYT_ = {"ajaxurl":"https:\/\/www.coveros.com\/wp-admin\/admin-ajax.php","security":"35015a3bf5","gallery_scrolloffset":"20","eppathtoscripts":"https:\/\/www.coveros.com\/wp-content\/plugins\/youtube-embed-plus\/scripts\/","epresponsiveselector":"[\"iframe.__youtube_prefs_widget__\"]","epdovol":"1","version":"12.1","evselector":"iframe.__youtube_prefs__[src], iframe[src*=\"youtube.com\/embed\/\"], iframe[src*=\"youtube-nocookie.com\/embed\/\"]","ajax_compat":"","ytapi_load":"light","stopMobileBuffer":"1","vi_active":"","vi_js_posttypes":[]};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/ytprefs.min.js.download"></script>
+<meta name="generator" content="WordPress Download Manager 2.9.77">
+<link rel="https://api.w.org/" href="https://www.coveros.com/wp-json/">
+<link rel="shortlink" href="https://wp.me/p4zPsZ-ev">
+<link rel="alternate" type="application/json+oembed" href="https://www.coveros.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.coveros.com%2Fcalling-python-code-from-c%2F">
+<link rel="alternate" type="text/xml+oembed" href="https://www.coveros.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.coveros.com%2Fcalling-python-code-from-c%2F&amp;format=xml">
+
+        <script>
+            var wpdm_site_url = 'https://www.coveros.com/';
+            var wpdm_home_url = 'https://www.coveros.com/';
+            var ajax_url = 'https://www.coveros.com/wp-admin/admin-ajax.php';
+            var wpdm_ajax_url = 'https://www.coveros.com/wp-admin/admin-ajax.php';
+            var wpdm_ajax_popup = '0';
+        </script>
+
+
+        <style>.post-thumbnail img[src$='.svg'] { width: 100%; height: auto; }</style>
+<link rel="dns-prefetch" href="https://v0.wordpress.com/">
+<link rel="dns-prefetch" href="https://widgets.wp.com/">
+<link rel="dns-prefetch" href="https://s0.wp.com/">
+<link rel="dns-prefetch" href="https://0.gravatar.com/">
+<link rel="dns-prefetch" href="https://1.gravatar.com/">
+<link rel="dns-prefetch" href="https://2.gravatar.com/">
+<link rel="dns-prefetch" href="https://s1.wp.com/">
+<link rel="dns-prefetch" href="https://s2.wp.com/">
+<style type="text/css">.pace .pace-progress {background-color: #02869f; color: #02869f;}.pace .pace-activity {box-shadow: inset 0 0 0 2px #02869f, inset 0 0 0 7px #ffffff;}.pace-overlay {background-color: #ffffff;}</style>
+
+<!-- EventON Version -->
+<meta name="generator" content="EventON 2.6.12">
+
+<style type="text/css" id="syntaxhighlighteranchor"></style>
+<link rel="icon" href="https://www.coveros.com/wp-content/uploads/cropped-fav-1-32x32.png" sizes="32x32">
+<link rel="icon" href="https://www.coveros.com/wp-content/uploads/cropped-fav-1-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon-precomposed" href="https://www.coveros.com/wp-content/uploads/cropped-fav-1-180x180.png">
+<meta name="msapplication-TileImage" content="https://www.coveros.com/wp-content/uploads/cropped-fav-1-270x270.png">
+
+		<style type="text/css" id="illdy-about-section-css">#header.header-front-page {background-image: url(https://www.coveros.com/wp-content/uploads/People-Consulting.jpg) !important;}#header.header-front-page .bottom-header .header-button-one {background-color: rgba( 0, 0, 0, .2 );}#header.header-front-page .bottom-header .header-button-one:hover {background-color: rgba( 0, 0, 0, .1 );}#header.header-front-page .bottom-header .header-button-two {background-color: #02869f;}#header.header-front-page .bottom-header .header-button-two:hover {background-color: #035359;}#header.header-front-page .bottom-header span.span-dot {color: #02869f;}</style>
+		<style type="text/css" id="illdy-latestnews-section-css">#latest-news {background-color: #696969;}#latest-news .latest-news-button {background-color: #02869f;}#latest-news .latest-news-button:hover {background-color: #035359;}#latest-news .section-content .post {background-color: #696969;}#latest-news .section-content .post .post-title {color: #ffffff;}#latest-news .section-content .post .post-title:hover {color: #02869f;}#latest-news .section-content .post .post-entry {color: #ffffff;}#latest-news .section-content .post .post-button {color: #ffffff;}#latest-news .section-content .post .post-button:hover {color: #02869f;}</style>
+		<style type="text/css" id="illdy-fullwidth-section-css">#full-width:before {background-color: #ffffff;}#full-width .section-header h3 {color: #02869f;}#full-width .section-header .section-description {color: #02869f;}#full-width .top-parallax-section h1, #full-width .top-parallax-section p {color: #02869f;}</style>
+		<style type="text/css" id="illdy-about-section-css">#about .section-header h3 {color: #02869f;}#about .section-header .section-description {color: #707070;}</style>
+		<style type="text/css" id="illdy-projects-section-css">#projects:before {background-size: auto !important;}#projects:before {background-repeat: repeat !important;}#projects:before {background-color: #02869f;}#projects .section-header h3 {color: #ffffff;}#projects .section-header .section-description {color: #ffffff;}</style>
+		<style type="text/css" id="illdy-services-section-css">#services .section-header h3 {color: #02869f;}#services .section-header .section-description {color: #707070;}</style>
+		<style type="text/css" id="illdy-team-section-css">#team:before {background-size: auto !important;}#team:before {background-repeat: repeat !important;}#team .section-header h3 {color: #02869f;}#team .section-header .section-description {color: #707070;}</style>
+		<style type="text/css" id="illdy-testimonials-section-css">#testimonials:before {background-attachment: scroll !important;}#testimonials:before {background-color: #02869f;}#testimonials .section-content .testimonials-carousel .carousel-testimonial .testimonial-content {background-color: #696969;}#testimonials .section-content .testimonials-carousel .carousel-testimonial .testimonial-content:after {border-color: #696969 transparent transparent transparent;}</style>
+
+				<link rel="stylesheet" type="text/css" id="wp-custom-css" href="./Calling Python Code from C++ - Coveros_files/saved_resource">
+		<script src="./Calling Python Code from C++ - Coveros_files/iframe_api" type="text/javascript"></script><link rel="stylesheet" type="text/css" id="gravatar-card-css" href="./Calling Python Code from C++ - Coveros_files/hovercard.min.css"><link rel="stylesheet" type="text/css" id="gravatar-card-services-css" href="./Calling Python Code from C++ - Coveros_files/services.min.css"></head>
+<body class="post-template-default single single-post postid-899 single-format-standard wp-custom-logo group-blog">
+<header id="header" class="header-blog" style="background-image: url(https://www.coveros.com/wp-content/uploads/2013/03/Code.jpg);background-attachment: fixed;">
+	<div class="top-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-4 col-xs-8">
+
+					<a href="https://www.coveros.com/"><img src="./Calling Python Code from C++ - Coveros_files/CoverosLogo-Blue-DropShadow-3.png" scale="0"></a>			
+				</div><!--/.col-sm-2-->
+				<div class="col-sm-8 col-xs-4">
+					<nav class="header-navigation">
+						<ul id="menu-top-navigation" class="clearfix"><li id="menu-item-6734" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-6734"><a href="https://www.coveros.com/#projects">Products</a>
+<ul class="sub-menu">
+	<li id="menu-item-6735" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6735"><a href="https://www.coveros.com/products/secure-ci/">SecureCI</a></li>
+	<li id="menu-item-7149" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7149"><a href="https://www.coveros.com/products/selenified/">Selenified</a></li>
+</ul>
+</li>
+<li id="menu-item-6738" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-6738"><a href="https://www.coveros.com/#services">Services</a>
+<ul class="sub-menu">
+	<li id="menu-item-6741" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6741"><a href="https://www.coveros.com/services/agile-transition/">Agile Transformation</a></li>
+	<li id="menu-item-6740" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6740"><a href="https://www.coveros.com/services/agile-development/">Agile Development</a></li>
+	<li id="menu-item-6739" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6739"><a href="https://www.coveros.com/services/software-testing/">Software Testing</a></li>
+	<li id="menu-item-6742" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6742"><a href="https://www.coveros.com/services/devops/">DevOps</a></li>
+	<li id="menu-item-6743" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6743"><a href="https://www.coveros.com/services/software-security/">Software Security</a></li>
+</ul>
+</li>
+<li id="menu-item-9143" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-9143"><a href="https://training.coveros.com/">Training</a>
+<ul class="sub-menu">
+	<li id="menu-item-9150" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9150"><a href="https://training.coveros.com/delivery-options/onsite-training">Private, On-Site Training</a></li>
+	<li id="menu-item-9151" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9151"><a href="https://training.coveros.com/delivery-options/public-classroom-training">Public Events</a></li>
+	<li id="menu-item-9152" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9152"><a href="https://training.coveros.com/delivery-options/live-virtual-training">Virtual Training</a></li>
+	<li id="menu-item-9153" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9153"><a href="https://training.coveros.com/find-training">Find Training</a></li>
+</ul>
+</li>
+<li id="menu-item-6745" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-6745"><a href="https://www.coveros.com/#latest-news">Thought Leadership</a>
+<ul class="sub-menu">
+	<li id="menu-item-6748" class="menu-item menu-item-type-post_type menu-item-object-page current_page_parent menu-item-6748"><a href="https://www.coveros.com/blog/">Blog</a></li>
+	<li id="menu-item-7254" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7254"><a href="https://www.coveros.com/presentations/">Presentations</a></li>
+	<li id="menu-item-7257" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7257"><a href="https://www.coveros.com/publications/">Publications</a></li>
+	<li id="menu-item-6751" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6751"><a href="https://www.coveros.com/webinars-videos/">Webinars &amp; Videos</a></li>
+</ul>
+</li>
+<li id="menu-item-6752" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-6752"><a href="https://www.coveros.com/#about">About Us</a>
+<ul class="sub-menu">
+	<li id="menu-item-9411" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-9411"><a href="https://www.coveros.com/about-coveros/">About Coveros</a></li>
+	<li id="menu-item-6754" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-6754"><a href="https://www.coveros.com/#team">Our Team</a></li>
+	<li id="menu-item-9653" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-9653"><a href="https://www.coveros.com/partners/">Partners</a></li>
+	<li id="menu-item-6755" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6755"><a href="https://www.coveros.com/careers/">Careers</a></li>
+	<li id="menu-item-6753" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-6753"><a href="https://www.coveros.com/#contact-us">Contact</a></li>
+</ul>
+</li>
+</ul>					</nav>
+					<button class="open-responsive-menu"><i class="fa fa-bars"></i></button>
+				</div><!--/.col-sm-10-->
+			</div><!--/.row-->
+		</div><!--/.container-->
+	</div><!--/.top-header-->
+	<nav class="responsive-menu">
+		<ul>
+			<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-6734"><a href="https://www.coveros.com/#projects">Products</a>
+<ul class="sub-menu">
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6735"><a href="https://www.coveros.com/products/secure-ci/">SecureCI</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7149"><a href="https://www.coveros.com/products/selenified/">Selenified</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-6738"><a href="https://www.coveros.com/#services">Services</a>
+<ul class="sub-menu">
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6741"><a href="https://www.coveros.com/services/agile-transition/">Agile Transformation</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6740"><a href="https://www.coveros.com/services/agile-development/">Agile Development</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6739"><a href="https://www.coveros.com/services/software-testing/">Software Testing</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6742"><a href="https://www.coveros.com/services/devops/">DevOps</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6743"><a href="https://www.coveros.com/services/software-security/">Software Security</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-9143"><a href="https://training.coveros.com/">Training</a>
+<ul class="sub-menu">
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9150"><a href="https://training.coveros.com/delivery-options/onsite-training">Private, On-Site Training</a></li>
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9151"><a href="https://training.coveros.com/delivery-options/public-classroom-training">Public Events</a></li>
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9152"><a href="https://training.coveros.com/delivery-options/live-virtual-training">Virtual Training</a></li>
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9153"><a href="https://training.coveros.com/find-training">Find Training</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-6745"><a href="https://www.coveros.com/#latest-news">Thought Leadership</a>
+<ul class="sub-menu">
+	<li class="menu-item menu-item-type-post_type menu-item-object-page current_page_parent menu-item-6748"><a href="https://www.coveros.com/blog/">Blog</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7254"><a href="https://www.coveros.com/presentations/">Presentations</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7257"><a href="https://www.coveros.com/publications/">Publications</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6751"><a href="https://www.coveros.com/webinars-videos/">Webinars &amp; Videos</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-6752"><a href="https://www.coveros.com/#about">About Us</a>
+<ul class="sub-menu">
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-9411"><a href="https://www.coveros.com/about-coveros/">About Coveros</a></li>
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-6754"><a href="https://www.coveros.com/#team">Our Team</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-9653"><a href="https://www.coveros.com/partners/">Partners</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6755"><a href="https://www.coveros.com/careers/">Careers</a></li>
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-6753"><a href="https://www.coveros.com/#contact-us">Contact</a></li>
+</ul>
+</li>
+		</ul>
+	</nav><!--/.responsive-menu-->
+	<div class="bottom-header blog">
+	<div class="container">
+		<div class="row">
+							<div class="col-sm-12">
+					<h1>Calling Python Code from C++</h1>							</div><!--/.col-sm-12-->
+								</div><!--/.row-->
+	</div><!--/.container-->
+</div><!--/.bottom-header.blog-->
+</header><!--/#header-->
+	<div class="container">
+	<div class="row">
+				<div class="col-sm-8">
+			
+				<section id="blog">
+					<div id="espresso-notices" style="position: fixed; top: 271.125px; left: 408.5px; margin: 0px;"></div><div id="espresso-ajax-loading" style="display:none;">
+    <span class="ee-spinner ee-spin"></span><span style="display:none;">
+        loading...</span>
+</div>
+
+<div id="espresso-ajax-notices">
+
+    <div id="espresso-ajax-notices-success" class="espresso-ajax-notices success fade-away" style="display:none;">
+        <a class="close-espresso-notice"><span class="dashicons dashicons-no"></span></a>
+        <p class="espresso-notices-msg"></p>
+    </div>
+
+    <div id="espresso-ajax-notices-attention" class="espresso-ajax-notices attention fade-away" style="display:none;">
+        <a class="close-espresso-notice"><span class="dashicons dashicons-no"></span></a>
+        <p class="espresso-notices-msg"></p>
+    </div>
+
+    <div id="espresso-ajax-notices-error" class="espresso-ajax-notices error fade-away" style="display:none;">
+        <a class="close-espresso-notice"><span class="dashicons dashicons-no"></span></a>
+        <p class="espresso-notices-msg"></p>
+    </div>
+
+</div>
+<article id="post-899" class="blog-post post-899 post type-post status-publish format-standard has-post-thumbnail hentry category-blogs category-development tag-c tag-evergreen tag-microsoft-detours tag-python tag-visual-studio-2010">
+	
+	<div class="blog-post-meta"><span class="post-meta-author"><i class="fa fa-user"></i>Jonathan Kauffman</span><span class="post-meta-time"><i class="fa fa-calendar"></i><time datetime="2012-12-08">December 8, 2012</time></span><span class="post-meta-categories"><i class="fa fa-folder-o" aria-hidden="true"></i><a href="https://www.coveros.com/category/blogs/" rel="category tag">Blogs</a>, <a href="https://www.coveros.com/category/blogs/development/" rel="category tag">Development</a></span><span class="post-meta-comments"><i class="fa fa-comment-o"></i><a class="meta-comments" href="https://www.coveros.com/calling-python-code-from-c/#comments" title="1 comment">1 comment</a></span></div><!--/.blog-post-meta-->	<div class="blog-post-entry markup-format">
+		<p>When developing an application in programming language A you may discover that certain parts of the program are easier to code using a different language B.&nbsp; At this point you have one of three choices:</p>
+<div>
+<ol>
+<li>Write the application entirely in language A.</li>
+<li>Write the application entirely in language B.</li>
+<li>Write most of the application using language A and call language B from A when appropriate.</li>
+</ol>
+<p>The downsides of the first two approaches are that you sacrifice the benefits of writing parts of the application in one language for the sake of using a uniform language.&nbsp; By using the third approach you overcome these downsides at the cost of the context switching required to start executing code in a different language.&nbsp; However, depending on the frequency with which the program will execute code written in language B, this trade-off may be acceptable.</p>
+<p>In the Active Authentication project we are writing C++ code that leverages the Detours library to collect system call traces.&nbsp; However, there are several implementations of algorithms used to process these system call traces that are available in Python.&nbsp; We could translate these algorithms to C++, but because this is a research project we decided to refrain from doing so until we had evidence that calling the Python code from C++ incurs an unacceptable time overhead.&nbsp; In this post I will, through the use of a simple example, describe how to call a Python function from C++ and retrieve its return value.&nbsp; I will assume that you already have Microsoft Visual Studio and Python installed on your computer.&nbsp; The following example was tested with Visual Studio 2010 Professional and Python 2.7.3.</p>
+<p><strong>Creating the Visual Studio Project</strong></p>
+<p>Open Visual Studio and create a new C++ “Win32 Console Application” project.&nbsp; Before you can call Python code you need to tell Visual Studio how to find Python.&nbsp; Before doing this change the build mode from “Debug” to “Release”.&nbsp; If you attempt to build a Visual Studio project that calls Python code in Debug mode the build will fail because, in debugging mode, Visual Studio will look for a library file that does not exist.&nbsp; The reason why this file did not exist on my machine is because the Windows Python installer did not install a version of Python compiled in Debug mode.&nbsp; It is possible to get a version of Python built in Debug mode, but you will have to download the Python source code and build it manually.&nbsp; For the purposes of this blog post we will ignore this and just change to Release mode.</p>
+<p>Next you need to add the locations of the Python header and library files to the project properties.&nbsp; My Python installation directory was “C:\Python27”, so I added “C:\Python27\include” to the list of include directories and “C:\Python27\libs” to the list of library directories.&nbsp; After making these changes to the properties you should be able to add the line “#include &lt;Python.h&gt;” to the C++ source file and build the project without error.</p>
+<p>You can now replace the contents of your C++ source file with the following source code example:</p>
+<blockquote><p>#include “stdafx.h”</p>
+<p>#include &lt;iostream&gt;</p>
+<p>#include &lt;Python.h&gt;</p>
+<p>int _tmain(int argc, _TCHAR* argv[])</p>
+<p>{</p>
+<p style="padding-left: 30px;">printf(“Calling Python to find the sum of 2 and 2.\n”);</p>
+<p style="padding-left: 30px;">// Initialize the Python interpreter.</p>
+<p style="padding-left: 30px;">Py_Initialize();</p>
+<p style="padding-left: 30px;">// Create some Python objects that will later be assigned values.</p>
+<p style="padding-left: 30px;">PyObject *pName, *pModule, *pDict, *pFunc, *pArgs, *pValue;</p>
+<p style="padding-left: 30px;">// Convert the file name to a Python string.</p>
+<p style="padding-left: 30px;">pName = PyString_FromString(“Sample”);</p>
+<p style="padding-left: 30px;">// Import the file as a Python module.</p>
+<p style="padding-left: 30px;">pModule = PyImport_Import(pName);</p>
+<p style="padding-left: 30px;">// Create a dictionary for the contents of the module.</p>
+<p style="padding-left: 30px;">pDict = PyModule_GetDict(pModule);</p>
+<p style="padding-left: 30px;">// Get the add method from the dictionary.</p>
+<p style="padding-left: 30px;">pFunc = PyDict_GetItemString(pDict, “add”);</p>
+<p style="padding-left: 30px;">// Create a Python tuple to hold the arguments to the method.</p>
+<p style="padding-left: 30px;">pArgs = PyTuple_New(2);</p>
+<p style="padding-left: 30px;">// Convert 2 to a Python integer.</p>
+<p style="padding-left: 30px;">pValue = PyInt_FromLong(2);</p>
+<p style="padding-left: 30px;">// Set the Python int as the first and second arguments to the method.</p>
+<p style="padding-left: 30px;">PyTuple_SetItem(pArgs, 0, pValue);</p>
+<p style="padding-left: 30px;">PyTuple_SetItem(pArgs, 1, pValue);</p>
+<p style="padding-left: 30px;">// Call the function with the arguments.</p>
+<p style="padding-left: 30px;">PyObject* pResult = PyObject_CallObject(pFunc, pArgs);</p>
+<p style="padding-left: 30px;">// Print a message if calling the method failed.</p>
+<p style="padding-left: 30px;">if(pResult == NULL)</p>
+<p style="padding-left: 60px;">printf(“Calling the add method failed.\n”);</p>
+<p style="padding-left: 30px;">// Convert the result to a long from a Python object.</p>
+<p style="padding-left: 30px;">long result = PyInt_AsLong(pResult);</p>
+<p style="padding-left: 30px;">// Destroy the Python interpreter.</p>
+<p style="padding-left: 30px;">Py_Finalize();</p>
+<p style="padding-left: 30px;">// Print the result.</p>
+<p style="padding-left: 30px;">printf(“The result is %d.\n”, result); std::cin.ignore(); return 0; }</p>
+</blockquote>
+<p>Since the code comments describe the purpose of almost every statement I will simply describe what the code does at a high level.&nbsp; This program calls a Python function that returns the sum of two numbers.&nbsp; First the program creates a Python interpreter so that it can execute Python code.&nbsp; The program then retrieves the method from the Python source file and prepares the arguments that will be sent to the method.&nbsp; The C++ code then calls the function, retrieves the result, and destroys the Python interpreter. &nbsp;Finally, the program prints the result of adding 2 and 2.&nbsp; Now that the C++ code is ready you need to write the Python code that will be called.</p>
+<p><strong>Creating the Python File</strong></p>
+<p>Next you should add the Python function “add” that will be called from C++ to a file named “Sample.py”.&nbsp; The code for this function is:</p>
+<blockquote><p># Returns the sum of two numbers.</p>
+<p>def add(a, b):</p>
+<p style="padding-left: 30px;">return a+b</p>
+</blockquote>
+<p>Add this file to the Release directory of the Visual Studio solution.&nbsp; In general it should be in the same directory as the executable that is calling the Python code.</p>
+<p>After creating the Python file you should be able to run the Visual Studio project and see the following output:</p>
+<p style="padding-left: 30px;">Calling Python to find the sum of 2 and 2. The result is 4.</p>
+<p><strong>Future Work</strong></p>
+<p>In the Active Authentication project we created Python objects that we accessed and modified throughout the execution of a C++ program.&nbsp; In a future post I may describe how to manage Python objects from C++ and serialize them so that they can be accessed during subsequent program executions.&nbsp; Another possible topic for a future post is a performance comparison of two versions of some simple (yet realistic) C++ program – one that executes a subroutine written in C++ and another that calls Python code to perform the same task.</p>
+</div>
+	</div><!--/.blog-post-entry.markup-format-->
+	<div class="blog-post-author clearfix"><img src="./Calling Python Code from C++ - Coveros_files/Jonathan-Kauffman-Coveros-Consultant-125x125.png" width="98" height="98" alt="Jonathan Kauffman" class="avatar avatar-98 wp-user-avatar wp-user-avatar-98 alignnone photo" scale="0"><h4>Jonathan Kauffman</h4><div>Jonathan Kauffman works as an agile software development and test consultant at Coveros, a company that helps organizations develop secure software using agile methods.  In this role, Jonathan has helped both government and commercial organizations develop and test high-quality applications, and he has gained his experience by working with healthcare, bio-medical device, and research organizations.  Jonathan also presents at and attends Meetups to help maintain his connection with the software testing community and to stay abreast of recent industry developments.  Before joining Coveros, he earned his B.S. in Computer Science from Allegheny College, where he published research on techniques for optimizing regression test suites.</div></div><!--/.blog-post-author.clearfix--><div class="blog-post-related-articles"><div class="row"><div class="col-sm-12"><div class="related-article-title">Related Articles</div><!--/.related-article-title--></div><!--/.col-sm-12--><div class="col-sm-4"><a href="https://www.coveros.com/our-2018-year-in-review/" title="Our 2018 Year in Review" class="related-post" style="background-image: url(https://www.coveros.com/wp-content/uploads/Speed-networking-at-STARWEST-2018-240x206.jpg);"><span class="related-post-title">Our 2018 Year in Review</span></a><!--/.related-post--></div><!--/.col-sm-4--><div class="col-sm-4"><a href="https://www.coveros.com/building-confidence-in-your-automation/" title="Building Confidence in Your Automation" class="related-post" style="background-image: url(https://www.coveros.com/wp-content/uploads/abstract-achievement-bright-614117-240x206.jpg);"><span class="related-post-title">Building Confidence in Your Automation</span></a><!--/.related-post--></div><!--/.col-sm-4--><div class="col-sm-4"><a href="https://www.coveros.com/running-android-tests-in-docker/" title="Running Android Tests in Docker" class="related-post" style="background-image: url(https://www.coveros.com/wp-content/uploads/android-android-phone-blur-544900-240x206.jpg);"><span class="related-post-title">Running Android Tests in Docker</span></a><!--/.related-post--></div><!--/.col-sm-4--></div><!--/.row--></div><!--/.blog-post-related-articles-->	
+<div id="comments">
+				
+			<div id="comments-list">
+				<h3 class="medium">
+					One thought to “Calling Python Code from C++”				</h3>
+				<ul class="comments">
+							<li class="comment even thread-even depth-1" id="li-comment-9472">
+			<div id="comment-9472">
+				<div class="row">
+					<div class="col-sm-2 clearfix">
+						<div class="comment-gravatar">
+							<img src="./Calling Python Code from C++ - Coveros_files/b48100eee2d218c02b35f6a777805ec8.png" width="84" height="84" alt="" class="avatar avatar-84wp-user-avatar wp-user-avatar-84 alignnone photo avatar-default grav-hashed grav-hijack" originals="84" src-orig="https://secure.gravatar.com/avatar/b48100eee2d218c02b35f6a777805ec8?s=84&amp;d=mm&amp;r=g" scale="1.25" id="grav-b48100eee2d218c02b35f6a777805ec8-0">						</div><!--/.comment-gravatar-->
+					</div><!--/.col-sm-2-->
+					<div class="col-sm-10">
+						Raghav						<time class="comment-time" datetime="2012-12-08">March 23, 2018 at 7:04 am</time>
+						<div class="comment-entry markup-format">
+							<p>If the above code doesn’t work, try adding the following lines just below Py_Initialize(); </p>
+<p>PyRun_SimpleString(“import sys”);<br>
+PyRun_SimpleString(“sys.path.append(\”.\”)”);</p>
+													</div><!--/.comment-entry.markup-format-->
+						<a rel="nofollow" class="comment-reply-link" href="https://www.coveros.com/calling-python-code-from-c/#comment-9472" onclick="return addComment.moveForm( &quot;comment-9472&quot;, &quot;9472&quot;, &quot;respond&quot;, &quot;899&quot; )" aria-label="Reply to Raghav">Reply</a>					</div><!--/.col-sm-10-->
+				</div><!--/.row-->
+			</div><!--/#comment-9472.row-->
+		</li><!-- #comment-## -->
+				</ul><!--/.comments-->
+			</div><!--/#comments-list-->
+
+				
+	
+			<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a comment <small><a rel="nofollow" id="cancel-comment-reply-link" href="https://www.coveros.com/calling-python-code-from-c/#respond" style="display:none;">Cancel reply</a></small></h3>			<form action="https://www.coveros.com/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate="">
+				<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><div class="row"><div class="col-sm-4"><input class="input-full" placeholder="Name" name="author" type="text" value="" aria-required="true"></div>
+<div class="col-sm-4"><input class="input-full" placeholder="Email" name="email" type="email" value="" aria-required="true"></div>
+<div class="col-sm-4"><input class="input-full" placeholder="Website" name="url" type="url" value=""></div>
+<div class="col-sm-12"><textarea placeholder="Message" name="comment" aria-required="true"></textarea></div><!--/.col-sm-12--></div><!--/.row--><p class="form-submit"><input name="submit" type="submit" id="input-submit" class="submit" value="Send"> <input type="hidden" name="comment_post_ID" value="899" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="90fcdae03d"></p><p class="comment-subscription-form"><input type="checkbox" name="subscribe_comments" id="subscribe_comments" value="subscribe" style="width: auto; -moz-appearance: checkbox; -webkit-appearance: checkbox;"> <label class="subscribe-label" id="subscribe-label" for="subscribe_comments">Notify me of follow-up comments by email.</label></p><p class="comment-subscription-form"><input type="checkbox" name="subscribe_blog" id="subscribe_blog" value="subscribe" style="width: auto; -moz-appearance: checkbox; -webkit-appearance: checkbox;"> <label class="subscribe-label" id="subscribe-blog-label" for="subscribe_blog">Notify me of new posts by email.</label></p><p style="display: none;"></p>			<input type="hidden" id="ak_js" name="ak_js" value="1547887543091"></form>
+			</div><!-- #respond -->
+	</div><!--/#comments-->
+</article><!--/#post-899.blog-post-->
+				</section><!--/#blog-->
+			</div><!--/.col-sm-7-->
+
+							<div class="col-sm-4">
+					<div id="sidebar">
+								<div id="recent-posts-4" class="widget widget_recent_entries">		<div class="widget-title"><h5>Recent Blogs</h5></div>		<ul>
+											<li>
+					<a href="https://www.coveros.com/how-testers-can-collaborate-with-the-scrummaster/">How Testers Can Collaborate with the ScrumMaster</a>
+									</li>
+											<li>
+					<a href="https://www.coveros.com/our-2018-year-in-review/">Our 2018 Year in Review</a>
+									</li>
+											<li>
+					<a href="https://www.coveros.com/building-confidence-in-your-automation/">Building Confidence in Your Automation</a>
+									</li>
+					</ul>
+		</div><div id="text-23" class="widget widget_text"><div class="widget-title"><h5>Recent Videos</h5></div>			<div class="textwidget"><div class="fluid-width-video-wrapper" style="padding-top: 50% !important;"><iframe id="_ytid_61651" src="./Calling Python Code from C++ - Coveros_files/saved_resource.html" class="__youtube_prefs__ __youtube_prefs_widget__" title="YouTube player" allow="autoplay; encrypted-media" allowfullscreen="" data-no-lazy="1" data-skipgform_ajax_framebjll=""></iframe></div></div>
+		</div><div id="text-13" class="widget widget_text"><div class="widget-title"><h5>Social</h5></div>			<div class="textwidget"><p><a href="http://www.linkedin.com/company/coveros"><img src="./Calling Python Code from C++ - Coveros_files/linkedin-4-256.png" alt="LinkedIn" width="50" height="50" scale="0"></a><a href="http://www.twitter.com/coveros"><img src="./Calling Python Code from C++ - Coveros_files/Twitter-Icon.png" alt="Twitter" width="50" height="50" scale="0"></a><a href="http://www.facebook.com/coveros"><img src="./Calling Python Code from C++ - Coveros_files/facebook-4-256.png" alt="Facebook" width="50" height="50" scale="0"></a><a href="https://www.coveros.com/feed"><img src="./Calling Python Code from C++ - Coveros_files/rss-4-256.png" alt="RSS Feed" width="50" height="50" scale="0"></a></p>
+</div>
+		</div>					</div>
+				</div>
+					</div><!--/.row-->
+	</div><!--/.container-->
+	<footer id="footer">
+		<div class="container">
+			<div class="row">
+								<div class="col-md-3 col-sm-6 col-xs-12">
+					<div id="media_image-3" class="widget widget_media_image"><a href="http://www.coveros.com/"><img width="280" height="150" src="./Calling Python Code from C++ - Coveros_files/CoverosLogo-Blue-DropShadow.png" class="image wp-image-6900 aligncenter attachment-full size-full" alt="Coveros Logo" style="max-width: 100%; height: auto;" scale="0"></a></div><div id="text-11" class="widget widget_text">			<div class="textwidget"><p align="center"><a href="http://www.linkedin.com/company/coveros"><img src="./Calling Python Code from C++ - Coveros_files/linkedin-4-256.png" alt="LinkedIn" width="50" height="50" scale="0"></a><a href="http://www.twitter.com/coveros"><img src="./Calling Python Code from C++ - Coveros_files/Twitter-Icon.png" alt="Twitter" width="50" height="50" scale="0"></a><a href="http://www.facebook.com/coveros"><img src="./Calling Python Code from C++ - Coveros_files/facebook-4-256.png" alt="Facebook" width="50" height="50" scale="0"></a><a href="https://www.coveros.com/feed"><img src="./Calling Python Code from C++ - Coveros_files/rss-4-256.png" alt="RSS Feed" width="50" height="50" scale="0"></a></p>
+</div>
+		</div>				</div><!--/.col-sm-3-->
+				<div class="col-md-3 col-sm-6 col-xs-12">
+					<div id="widget_contact_info-2" class="widget widget_contact_info"><div class="widget-title"><h5>Coveros Inc.</h5></div><div itemscope="" itemtype="http://schema.org/LocalBusiness"><div class="confit-phone"><span itemprop="telephone">929.341.0139</span></div><div class="confit-email"><a href="mailto:info@coveros.com">info@coveros.com</a></div><div class="confit-hours" itemprop="openingHours">4000 Legato Road, Suite 1100
+<br>Fairfax, Virginia 22033</div></div></div><div id="search-3" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://www.coveros.com/">
+	<div class="search-form-box">
+		<input type="submit" id="searchsubmit" value="">
+		<input type="search" id="s" placeholder="Search..." value="" name="s" title="Search for:">
+	</div><!--/.search-form-box-->
+</form><!--/.search-form-->
+</div>				</div><!--/.col-sm-3-->
+				<div class="col-md-3 col-sm-6 col-xs-12">
+					<div id="nav_menu-3" class="widget widget_nav_menu"><div class="menu-footer-navigation-container"><ul id="menu-footer-navigation" class="menu"><li id="menu-item-6761" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6761"><a href="https://www.coveros.com/careers/">Careers</a></li>
+<li id="menu-item-6759" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-6759"><a href="https://www.coveros.com/#services">Services</a></li>
+<li id="menu-item-6758" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-6758"><a href="https://www.coveros.com/#projects">Products</a></li>
+<li id="menu-item-9134" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9134"><a href="https://training.coveros.com/">Training</a></li>
+<li id="menu-item-6757" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-6757"><a href="https://www.coveros.com/privacy-policy">Privacy Policy</a></li>
+<li id="menu-item-9142" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9142"><a href="https://training.coveros.com/join-mailing-list">Join Our Mailing List</a></li>
+</ul></div></div>				</div><!--/.col-sm-3-->
+				<div class="col-md-3 col-sm-6 col-xs-12">
+					<div id="nav_menu-4" class="widget widget_nav_menu"><div class="menu-right-footer-container"><ul id="menu-right-footer" class="menu"><li id="menu-item-9157" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9157"><a href="https://www.agileconnection.com/">AgileConnection Community</a></li>
+<li id="menu-item-9158" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9158"><a href="https://www.stickyminds.com/">StickyMinds Community</a></li>
+<li id="menu-item-9159" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9159"><a href="https://www.techwell.com/techwell-insights">TechWell Insights</a></li>
+<li id="menu-item-9161" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9161"><a href="https://www.techwell.com/software-conferences/agile-devops-conferences">Agile + DevOps Conferences</a></li>
+<li id="menu-item-9162" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9162"><a href="https://www.techwell.com/software-conferences/star-software-testing-conferences">STAR Testing Conferences</a></li>
+<li id="menu-item-9163" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9163"><a href="https://www.techwell.com/software-conferences/agile-testing-days-conference">Agile Testing Days USA</a></li>
+</ul></div></div>				</div><!--/.col-sm-3-->
+			</div><!--/.row-->
+		</div><!--/.container-->
+	</footer>
+
+	<div class="bottom-footer">
+		<div class="container">
+			<p class="copyright">
+				<span>Theme: <a href="http://colorlib.com/wp/themes/illdy" title="Illdy" target="_blank">Illdy</a>.</span>
+				<span class="bottom-copyright" data-customizer="copyright-credit">Copyright Coveros © 2018. All Rights Reserved.</span>
+			</p>
+		</div>
+	</div>
+
+
+<div id="cart-results-modal-wrap-dv" style="display: none;"></div>		<script type="text/javascript" alt="evo_map_styles">
+		/*<![CDATA[*/
+		var gmapstyles = 'default';
+		/* ]]> */
+		</script>		
+			<div style="display:none">
+	<div class="grofile-hash-map-a296fc7c58c93c44df0dec028b60395d">
+	</div>
+	<div class="grofile-hash-map-b48100eee2d218c02b35f6a777805ec8">
+	</div>
+	</div>
+            <script type="text/javascript">
+            document.addEventListener( 'wpcf7mailsent', function( event ) {
+                if ( '7147' == event.detail.contactFormId ) {
+                    location = 'https://github.com/Coveros/selenified/releases/download/3.0.3/selenified-3.0.3.jar';
+                }
+            }, false );
+            </script>
+                    <script type="text/javascript">
+            document.addEventListener( 'wpcf7mailsent', function( event ) {
+                if ( '1227' == event.detail.contactFormId ) {
+                    location = 'https://www.coveros.com/products/secure-ci/secure-ci-download/';
+                }
+            }, false );
+            </script>
+        	<!--[if lte IE 8]>
+	<style>
+		.attachment:focus {
+			outline: #1e8cbe solid;
+		}
+		.selected.attachment {
+			outline: #1e8cbe solid;
+		}
+	</style>
+	<![endif]-->
+	<script type="text/html" id="tmpl-media-frame">
+		<div class="media-frame-menu"></div>
+		<div class="media-frame-title"></div>
+		<div class="media-frame-router"></div>
+		<div class="media-frame-content"></div>
+		<div class="media-frame-toolbar"></div>
+		<div class="media-frame-uploader"></div>
+	</script>
+
+	<script type="text/html" id="tmpl-media-modal">
+		<div tabindex="0" class="media-modal wp-core-ui">
+			<button type="button" class="media-modal-close"><span class="media-modal-icon"><span class="screen-reader-text">Close media panel</span></span></button>
+			<div class="media-modal-content"></div>
+		</div>
+		<div class="media-modal-backdrop"></div>
+	</script>
+
+	<script type="text/html" id="tmpl-uploader-window">
+		<div class="uploader-window-content">
+			<h1>Drop files to upload</h1>
+		</div>
+	</script>
+
+	<script type="text/html" id="tmpl-uploader-editor">
+		<div class="uploader-editor-content">
+			<div class="uploader-editor-title">Drop files to upload</div>
+		</div>
+	</script>
+
+	<script type="text/html" id="tmpl-uploader-inline">
+		<# var messageClass = data.message ? 'has-upload-message' : 'no-upload-message'; #>
+		<# if ( data.canClose ) { #>
+		<button class="close dashicons dashicons-no"><span class="screen-reader-text">Close uploader</span></button>
+		<# } #>
+		<div class="uploader-inline-content {{ messageClass }}">
+		<# if ( data.message ) { #>
+			<h2 class="upload-message">{{ data.message }}</h2>
+		<# } #>
+					<div class="upload-ui">
+				<h2 class="upload-instructions drop-instructions">Drop files anywhere to upload</h2>
+				<p class="upload-instructions drop-instructions">or</p>
+				<button type="button" class="browser button button-hero">Select Files</button>
+			</div>
+
+			<div class="upload-inline-status"></div>
+
+			<div class="post-upload-ui">
+				
+				<p class="max-upload-size">Maximum upload file size: 2 MB.</p>
+
+				<# if ( data.suggestedWidth && data.suggestedHeight ) { #>
+					<p class="suggested-dimensions">
+						Suggested image dimensions: {{data.suggestedWidth}} by {{data.suggestedHeight}} pixels.					</p>
+				<# } #>
+
+							</div>
+				</div>
+	</script>
+
+	<script type="text/html" id="tmpl-media-library-view-switcher">
+		<a href="/calling-python-code-from-c/?mode=list" class="view-list">
+			<span class="screen-reader-text">List View</span>
+		</a>
+		<a href="/calling-python-code-from-c/?mode=grid" class="view-grid current">
+			<span class="screen-reader-text">Grid View</span>
+		</a>
+	</script>
+
+	<script type="text/html" id="tmpl-uploader-status">
+		<h2>Uploading</h2>
+		<button type="button" class="button-link upload-dismiss-errors"><span class="screen-reader-text">Dismiss Errors</span></button>
+
+		<div class="media-progress-bar"><div></div></div>
+		<div class="upload-details">
+			<span class="upload-count">
+				<span class="upload-index"></span> / <span class="upload-total"></span>
+			</span>
+			<span class="upload-detail-separator">&ndash;</span>
+			<span class="upload-filename"></span>
+		</div>
+		<div class="upload-errors"></div>
+	</script>
+
+	<script type="text/html" id="tmpl-uploader-status-error">
+		<span class="upload-error-filename">{{{ data.filename }}}</span>
+		<span class="upload-error-message">{{ data.message }}</span>
+	</script>
+
+	<script type="text/html" id="tmpl-edit-attachment-frame">
+		<div class="edit-media-header">
+			<button class="left dashicons <# if ( ! data.hasPrevious ) { #> disabled <# } #>"><span class="screen-reader-text">Edit previous media item</span></button>
+			<button class="right dashicons <# if ( ! data.hasNext ) { #> disabled <# } #>"><span class="screen-reader-text">Edit next media item</span></button>
+		</div>
+		<div class="media-frame-title"></div>
+		<div class="media-frame-content"></div>
+	</script>
+
+	<script type="text/html" id="tmpl-attachment-details-two-column">
+		<div class="attachment-media-view {{ data.orientation }}">
+			<div class="thumbnail thumbnail-{{ data.type }}">
+				<# if ( data.uploading ) { #>
+					<div class="media-progress-bar"><div></div></div>
+				<# } else if ( data.sizes && data.sizes.large ) { #>
+					<img class="details-image" src="{{ data.sizes.large.url }}" draggable="false" alt="" />
+				<# } else if ( data.sizes && data.sizes.full ) { #>
+					<img class="details-image" src="{{ data.sizes.full.url }}" draggable="false" alt="" />
+				<# } else if ( -1 === jQuery.inArray( data.type, [ 'audio', 'video' ] ) ) { #>
+					<img class="details-image icon" src="{{ data.icon }}" draggable="false" alt="" />
+				<# } #>
+
+				<# if ( 'audio' === data.type ) { #>
+				<div class="wp-media-wrapper">
+					<audio style="visibility: hidden" controls class="wp-audio-shortcode" width="100%" preload="none">
+						<source type="{{ data.mime }}" src="{{ data.url }}"/>
+					</audio>
+				</div>
+				<# } else if ( 'video' === data.type ) {
+					var w_rule = '';
+					if ( data.width ) {
+						w_rule = 'width: ' + data.width + 'px;';
+					} else if ( wp.media.view.settings.contentWidth ) {
+						w_rule = 'width: ' + wp.media.view.settings.contentWidth + 'px;';
+					}
+				#>
+				<div style="{{ w_rule }}" class="wp-media-wrapper wp-video">
+					<video controls="controls" class="wp-video-shortcode" preload="metadata"
+						<# if ( data.width ) { #>width="{{ data.width }}"<# } #>
+						<# if ( data.height ) { #>height="{{ data.height }}"<# } #>
+						<# if ( data.image && data.image.src !== data.icon ) { #>poster="{{ data.image.src }}"<# } #>>
+						<source type="{{ data.mime }}" src="{{ data.url }}"/>
+					</video>
+				</div>
+				<# } #>
+
+				<div class="attachment-actions">
+					<# if ( 'image' === data.type && ! data.uploading && data.sizes && data.can.save ) { #>
+					<button type="button" class="button edit-attachment">Edit Image</button>
+					<# } else if ( 'pdf' === data.subtype && data.sizes ) { #>
+					Document Preview					<# } #>
+				</div>
+			</div>
+		</div>
+		<div class="attachment-info">
+			<span class="settings-save-status">
+				<span class="spinner"></span>
+				<span class="saved">Saved.</span>
+			</span>
+			<div class="details">
+				<div class="filename"><strong>File name:</strong> {{ data.filename }}</div>
+				<div class="filename"><strong>File type:</strong> {{ data.mime }}</div>
+				<div class="uploaded"><strong>Uploaded on:</strong> {{ data.dateFormatted }}</div>
+
+				<div class="file-size"><strong>File size:</strong> {{ data.filesizeHumanReadable }}</div>
+				<# if ( 'image' === data.type && ! data.uploading ) { #>
+					<# if ( data.width && data.height ) { #>
+						<div class="dimensions"><strong>Dimensions:</strong> {{ data.width }} &times; {{ data.height }}</div>
+					<# } #>
+				<# } #>
+
+				<# if ( data.fileLength ) { #>
+					<div class="file-length"><strong>Length:</strong> {{ data.fileLength }}</div>
+				<# } #>
+
+				<# if ( 'audio' === data.type && data.meta.bitrate ) { #>
+					<div class="bitrate">
+						<strong>Bitrate:</strong> {{ Math.round( data.meta.bitrate / 1000 ) }}kb/s
+						<# if ( data.meta.bitrate_mode ) { #>
+						{{ ' ' + data.meta.bitrate_mode.toUpperCase() }}
+						<# } #>
+					</div>
+				<# } #>
+
+				<div class="compat-meta">
+					<# if ( data.compat && data.compat.meta ) { #>
+						{{{ data.compat.meta }}}
+					<# } #>
+				</div>
+			</div>
+
+			<div class="settings">
+				<label class="setting" data-setting="url">
+					<span class="name">URL</span>
+					<input type="text" value="{{ data.url }}" readonly />
+				</label>
+				<# var maybeReadOnly = data.can.save || data.allowLocalEdits ? '' : 'readonly'; #>
+								<label class="setting" data-setting="title">
+					<span class="name">Title</span>
+					<input type="text" value="{{ data.title }}" {{ maybeReadOnly }} />
+				</label>
+								<# if ( 'audio' === data.type ) { #>
+								<label class="setting" data-setting="artist">
+					<span class="name">Artist</span>
+					<input type="text" value="{{ data.artist || data.meta.artist || '' }}" />
+				</label>
+								<label class="setting" data-setting="album">
+					<span class="name">Album</span>
+					<input type="text" value="{{ data.album || data.meta.album || '' }}" />
+				</label>
+								<# } #>
+				<label class="setting" data-setting="caption">
+					<span class="name">Caption</span>
+					<textarea {{ maybeReadOnly }}>{{ data.caption }}</textarea>
+				</label>
+				<# if ( 'image' === data.type ) { #>
+					<label class="setting" data-setting="alt">
+						<span class="name">Alt Text</span>
+						<input type="text" value="{{ data.alt }}" {{ maybeReadOnly }} />
+					</label>
+				<# } #>
+				<label class="setting" data-setting="description">
+					<span class="name">Description</span>
+					<textarea {{ maybeReadOnly }}>{{ data.description }}</textarea>
+				</label>
+				<label class="setting">
+					<span class="name">Uploaded By</span>
+					<span class="value">{{ data.authorName }}</span>
+				</label>
+				<# if ( data.uploadedToTitle ) { #>
+					<label class="setting">
+						<span class="name">Uploaded To</span>
+						<# if ( data.uploadedToLink ) { #>
+							<span class="value"><a href="{{ data.uploadedToLink }}">{{ data.uploadedToTitle }}</a></span>
+						<# } else { #>
+							<span class="value">{{ data.uploadedToTitle }}</span>
+						<# } #>
+					</label>
+				<# } #>
+				<div class="attachment-compat"></div>
+			</div>
+
+			<div class="actions">
+				<a class="view-attachment" href="{{ data.link }}">View attachment page</a>
+				<# if ( data.can.save ) { #> |
+					<a href="post.php?post={{ data.id }}&action=edit">Edit more details</a>
+				<# } #>
+				<# if ( ! data.uploading && data.can.remove ) { #> |
+											<button type="button" class="button-link delete-attachment">Delete Permanently</button>
+									<# } #>
+			</div>
+
+		</div>
+	</script>
+
+	<script type="text/html" id="tmpl-attachment">
+		<div class="attachment-preview js--select-attachment type-{{ data.type }} subtype-{{ data.subtype }} {{ data.orientation }}">
+			<div class="thumbnail">
+				<# if ( data.uploading ) { #>
+					<div class="media-progress-bar"><div style="width: {{ data.percent }}%"></div></div>
+				<# } else if ( 'image' === data.type && data.sizes ) { #>
+					<div class="centered">
+						<img src="{{ data.size.url }}" draggable="false" alt="" />
+					</div>
+				<# } else { #>
+					<div class="centered">
+						<# if ( data.image && data.image.src && data.image.src !== data.icon ) { #>
+							<img src="{{ data.image.src }}" class="thumbnail" draggable="false" alt="" />
+						<# } else if ( data.sizes && data.sizes.medium ) { #>
+							<img src="{{ data.sizes.medium.url }}" class="thumbnail" draggable="false" alt="" />
+						<# } else { #>
+							<img src="{{ data.icon }}" class="icon" draggable="false" alt="" />
+						<# } #>
+					</div>
+					<div class="filename">
+						<div>{{ data.filename }}</div>
+					</div>
+				<# } #>
+			</div>
+			<# if ( data.buttons.close ) { #>
+				<button type="button" class="button-link attachment-close media-modal-icon"><span class="screen-reader-text">Remove</span></button>
+			<# } #>
+		</div>
+		<# if ( data.buttons.check ) { #>
+			<button type="button" class="check" tabindex="-1"><span class="media-modal-icon"></span><span class="screen-reader-text">Deselect</span></button>
+		<# } #>
+		<#
+		var maybeReadOnly = data.can.save || data.allowLocalEdits ? '' : 'readonly';
+		if ( data.describe ) {
+			if ( 'image' === data.type ) { #>
+				<input type="text" value="{{ data.caption }}" class="describe" data-setting="caption"
+					placeholder="Caption this image&hellip;" {{ maybeReadOnly }} />
+			<# } else { #>
+				<input type="text" value="{{ data.title }}" class="describe" data-setting="title"
+					<# if ( 'video' === data.type ) { #>
+						placeholder="Describe this video&hellip;"
+					<# } else if ( 'audio' === data.type ) { #>
+						placeholder="Describe this audio file&hellip;"
+					<# } else { #>
+						placeholder="Describe this media file&hellip;"
+					<# } #> {{ maybeReadOnly }} />
+			<# }
+		} #>
+	</script>
+
+	<script type="text/html" id="tmpl-attachment-details">
+		<h2>
+			Attachment Details			<span class="settings-save-status">
+				<span class="spinner"></span>
+				<span class="saved">Saved.</span>
+			</span>
+		</h2>
+		<div class="attachment-info">
+			<div class="thumbnail thumbnail-{{ data.type }}">
+				<# if ( data.uploading ) { #>
+					<div class="media-progress-bar"><div></div></div>
+				<# } else if ( 'image' === data.type && data.sizes ) { #>
+					<img src="{{ data.size.url }}" draggable="false" alt="" />
+				<# } else { #>
+					<img src="{{ data.icon }}" class="icon" draggable="false" alt="" />
+				<# } #>
+			</div>
+			<div class="details">
+				<div class="filename">{{ data.filename }}</div>
+				<div class="uploaded">{{ data.dateFormatted }}</div>
+
+				<div class="file-size">{{ data.filesizeHumanReadable }}</div>
+				<# if ( 'image' === data.type && ! data.uploading ) { #>
+					<# if ( data.width && data.height ) { #>
+						<div class="dimensions">{{ data.width }} &times; {{ data.height }}</div>
+					<# } #>
+
+					<# if ( data.can.save && data.sizes ) { #>
+						<a class="edit-attachment" href="{{ data.editLink }}&amp;image-editor" target="_blank">Edit Image</a>
+					<# } #>
+				<# } #>
+
+				<# if ( data.fileLength ) { #>
+					<div class="file-length">Length: {{ data.fileLength }}</div>
+				<# } #>
+
+				<# if ( ! data.uploading && data.can.remove ) { #>
+											<button type="button" class="button-link delete-attachment">Delete Permanently</button>
+									<# } #>
+
+				<div class="compat-meta">
+					<# if ( data.compat && data.compat.meta ) { #>
+						{{{ data.compat.meta }}}
+					<# } #>
+				</div>
+			</div>
+		</div>
+
+		<label class="setting" data-setting="url">
+			<span class="name">URL</span>
+			<input type="text" value="{{ data.url }}" readonly />
+		</label>
+		<# var maybeReadOnly = data.can.save || data.allowLocalEdits ? '' : 'readonly'; #>
+				<label class="setting" data-setting="title">
+			<span class="name">Title</span>
+			<input type="text" value="{{ data.title }}" {{ maybeReadOnly }} />
+		</label>
+				<# if ( 'audio' === data.type ) { #>
+				<label class="setting" data-setting="artist">
+			<span class="name">Artist</span>
+			<input type="text" value="{{ data.artist || data.meta.artist || '' }}" />
+		</label>
+				<label class="setting" data-setting="album">
+			<span class="name">Album</span>
+			<input type="text" value="{{ data.album || data.meta.album || '' }}" />
+		</label>
+				<# } #>
+		<label class="setting" data-setting="caption">
+			<span class="name">Caption</span>
+			<textarea {{ maybeReadOnly }}>{{ data.caption }}</textarea>
+		</label>
+		<# if ( 'image' === data.type ) { #>
+			<label class="setting" data-setting="alt">
+				<span class="name">Alt Text</span>
+				<input type="text" value="{{ data.alt }}" {{ maybeReadOnly }} />
+			</label>
+		<# } #>
+		<label class="setting" data-setting="description">
+			<span class="name">Description</span>
+			<textarea {{ maybeReadOnly }}>{{ data.description }}</textarea>
+		</label>
+	</script>
+
+	<script type="text/html" id="tmpl-media-selection">
+		<div class="selection-info">
+			<span class="count"></span>
+			<# if ( data.editable ) { #>
+				<button type="button" class="button-link edit-selection">Edit Selection</button>
+			<# } #>
+			<# if ( data.clearable ) { #>
+				<button type="button" class="button-link clear-selection">Clear</button>
+			<# } #>
+		</div>
+		<div class="selection-view"></div>
+	</script>
+
+	<script type="text/html" id="tmpl-attachment-display-settings">
+		<h2>Attachment Display Settings</h2>
+
+		<# if ( 'image' === data.type ) { #>
+			<label class="setting align">
+				<span>Alignment</span>
+				<select class="alignment"
+					data-setting="align"
+					<# if ( data.userSettings ) { #>
+						data-user-setting="align"
+					<# } #>>
+
+					<option value="left">
+						Left					</option>
+					<option value="center">
+						Center					</option>
+					<option value="right">
+						Right					</option>
+					<option value="none" selected>
+						None					</option>
+				</select>
+			</label>
+		<# } #>
+
+		<div class="setting">
+			<label>
+				<# if ( data.model.canEmbed ) { #>
+					<span>Embed or Link</span>
+				<# } else { #>
+					<span>Link To</span>
+				<# } #>
+
+				<select class="link-to"
+					data-setting="link"
+					<# if ( data.userSettings && ! data.model.canEmbed ) { #>
+						data-user-setting="urlbutton"
+					<# } #>>
+
+				<# if ( data.model.canEmbed ) { #>
+					<option value="embed" selected>
+						Embed Media Player					</option>
+					<option value="file">
+				<# } else { #>
+					<option value="none" selected>
+						None					</option>
+					<option value="file">
+				<# } #>
+					<# if ( data.model.canEmbed ) { #>
+						Link to Media File					<# } else { #>
+						Media File					<# } #>
+					</option>
+					<option value="post">
+					<# if ( data.model.canEmbed ) { #>
+						Link to Attachment Page					<# } else { #>
+						Attachment Page					<# } #>
+					</option>
+				<# if ( 'image' === data.type ) { #>
+					<option value="custom">
+						Custom URL					</option>
+				<# } #>
+				</select>
+			</label>
+			<input type="text" class="link-to-custom" data-setting="linkUrl" />
+		</div>
+
+		<# if ( 'undefined' !== typeof data.sizes ) { #>
+			<label class="setting">
+				<span>Size</span>
+				<select class="size" name="size"
+					data-setting="size"
+					<# if ( data.userSettings ) { #>
+						data-user-setting="imgsize"
+					<# } #>>
+											<#
+						var size = data.sizes['thumbnail'];
+						if ( size ) { #>
+							<option value="thumbnail" >
+								Thumbnail &ndash; {{ size.width }} &times; {{ size.height }}
+							</option>
+						<# } #>
+											<#
+						var size = data.sizes['medium'];
+						if ( size ) { #>
+							<option value="medium" >
+								Medium &ndash; {{ size.width }} &times; {{ size.height }}
+							</option>
+						<# } #>
+											<#
+						var size = data.sizes['large'];
+						if ( size ) { #>
+							<option value="large" >
+								Large &ndash; {{ size.width }} &times; {{ size.height }}
+							</option>
+						<# } #>
+											<#
+						var size = data.sizes['full'];
+						if ( size ) { #>
+							<option value="full"  selected='selected'>
+								Full Size &ndash; {{ size.width }} &times; {{ size.height }}
+							</option>
+						<# } #>
+											<#
+						var size = data.sizes['a-thumbnail'];
+						if ( size ) { #>
+							<option value="a-thumbnail" >
+								Awesome thumbnail &ndash; {{ size.width }} &times; {{ size.height }}
+							</option>
+						<# } #>
+									</select>
+			</label>
+		<# } #>
+	</script>
+
+	<script type="text/html" id="tmpl-gallery-settings">
+		<h2>Gallery Settings</h2>
+
+		<label class="setting">
+			<span>Link To</span>
+			<select class="link-to"
+				data-setting="link"
+				<# if ( data.userSettings ) { #>
+					data-user-setting="urlbutton"
+				<# } #>>
+
+				<option value="post" <# if ( ! wp.media.galleryDefaults.link || 'post' == wp.media.galleryDefaults.link ) {
+					#>selected="selected"<# }
+				#>>
+					Attachment Page				</option>
+				<option value="file" <# if ( 'file' == wp.media.galleryDefaults.link ) { #>selected="selected"<# } #>>
+					Media File				</option>
+				<option value="none" <# if ( 'none' == wp.media.galleryDefaults.link ) { #>selected="selected"<# } #>>
+					None				</option>
+			</select>
+		</label>
+
+		<label class="setting">
+			<span>Columns</span>
+			<select class="columns" name="columns"
+				data-setting="columns">
+									<option value="1" <#
+						if ( 1 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
+					#>>
+						1					</option>
+									<option value="2" <#
+						if ( 2 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
+					#>>
+						2					</option>
+									<option value="3" <#
+						if ( 3 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
+					#>>
+						3					</option>
+									<option value="4" <#
+						if ( 4 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
+					#>>
+						4					</option>
+									<option value="5" <#
+						if ( 5 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
+					#>>
+						5					</option>
+									<option value="6" <#
+						if ( 6 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
+					#>>
+						6					</option>
+									<option value="7" <#
+						if ( 7 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
+					#>>
+						7					</option>
+									<option value="8" <#
+						if ( 8 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
+					#>>
+						8					</option>
+									<option value="9" <#
+						if ( 9 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
+					#>>
+						9					</option>
+							</select>
+		</label>
+
+		<label class="setting">
+			<span>Random Order</span>
+			<input type="checkbox" data-setting="_orderbyRandom" />
+		</label>
+
+		<label class="setting size">
+			<span>Size</span>
+			<select class="size" name="size"
+				data-setting="size"
+				<# if ( data.userSettings ) { #>
+					data-user-setting="imgsize"
+				<# } #>
+				>
+									<option value="thumbnail">
+						Thumbnail					</option>
+									<option value="medium">
+						Medium					</option>
+									<option value="large">
+						Large					</option>
+									<option value="full">
+						Full Size					</option>
+									<option value="a-thumbnail">
+						Awesome thumbnail					</option>
+							</select>
+		</label>
+	</script>
+
+	<script type="text/html" id="tmpl-playlist-settings">
+		<h2>Playlist Settings</h2>
+
+		<# var emptyModel = _.isEmpty( data.model ),
+			isVideo = 'video' === data.controller.get('library').props.get('type'); #>
+
+		<label class="setting">
+			<input type="checkbox" data-setting="tracklist" <# if ( emptyModel ) { #>
+				checked="checked"
+			<# } #> />
+			<# if ( isVideo ) { #>
+			<span>Show Video List</span>
+			<# } else { #>
+			<span>Show Tracklist</span>
+			<# } #>
+		</label>
+
+		<# if ( ! isVideo ) { #>
+		<label class="setting">
+			<input type="checkbox" data-setting="artists" <# if ( emptyModel ) { #>
+				checked="checked"
+			<# } #> />
+			<span>Show Artist Name in Tracklist</span>
+		</label>
+		<# } #>
+
+		<label class="setting">
+			<input type="checkbox" data-setting="images" <# if ( emptyModel ) { #>
+				checked="checked"
+			<# } #> />
+			<span>Show Images</span>
+		</label>
+	</script>
+
+	<script type="text/html" id="tmpl-embed-link-settings">
+		<label class="setting link-text">
+			<span>Link Text</span>
+			<input type="text" class="alignment" data-setting="linkText" />
+		</label>
+		<div class="embed-container" style="display: none;">
+			<div class="embed-preview"></div>
+		</div>
+	</script>
+
+	<script type="text/html" id="tmpl-embed-image-settings">
+		<div class="thumbnail">
+			<img src="{{ data.model.url }}" draggable="false" alt="" />
+		</div>
+
+					<label class="setting caption">
+				<span>Caption</span>
+				<textarea data-setting="caption" />
+			</label>
+		
+		<label class="setting alt-text">
+			<span>Alt Text</span>
+			<input type="text" data-setting="alt" />
+		</label>
+
+		<div class="setting align">
+			<span>Align</span>
+			<div class="button-group button-large" data-setting="align">
+				<button class="button" value="left">
+					Left				</button>
+				<button class="button" value="center">
+					Center				</button>
+				<button class="button" value="right">
+					Right				</button>
+				<button class="button active" value="none">
+					None				</button>
+			</div>
+		</div>
+
+		<div class="setting link-to">
+			<span>Link To</span>
+			<div class="button-group button-large" data-setting="link">
+				<button class="button" value="file">
+					Image URL				</button>
+				<button class="button" value="custom">
+					Custom URL				</button>
+				<button class="button active" value="none">
+					None				</button>
+			</div>
+			<input type="text" class="link-to-custom" data-setting="linkUrl" />
+		</div>
+	</script>
+
+	<script type="text/html" id="tmpl-image-details">
+		<div class="media-embed">
+			<div class="embed-media-settings">
+				<div class="column-image">
+					<div class="image">
+						<img src="{{ data.model.url }}" draggable="false" alt="" />
+
+						<# if ( data.attachment && window.imageEdit ) { #>
+							<div class="actions">
+								<input type="button" class="edit-attachment button" value="Edit Original" />
+								<input type="button" class="replace-attachment button" value="Replace" />
+							</div>
+						<# } #>
+					</div>
+				</div>
+				<div class="column-settings">
+											<label class="setting caption">
+							<span>Caption</span>
+							<textarea data-setting="caption">{{ data.model.caption }}</textarea>
+						</label>
+					
+					<label class="setting alt-text">
+						<span>Alternative Text</span>
+						<input type="text" data-setting="alt" value="{{ data.model.alt }}" />
+					</label>
+
+					<h2>Display Settings</h2>
+					<div class="setting align">
+						<span>Align</span>
+						<div class="button-group button-large" data-setting="align">
+							<button class="button" value="left">
+								Left							</button>
+							<button class="button" value="center">
+								Center							</button>
+							<button class="button" value="right">
+								Right							</button>
+							<button class="button active" value="none">
+								None							</button>
+						</div>
+					</div>
+
+					<# if ( data.attachment ) { #>
+						<# if ( 'undefined' !== typeof data.attachment.sizes ) { #>
+							<label class="setting size">
+								<span>Size</span>
+								<select class="size" name="size"
+									data-setting="size"
+									<# if ( data.userSettings ) { #>
+										data-user-setting="imgsize"
+									<# } #>>
+																			<#
+										var size = data.sizes['thumbnail'];
+										if ( size ) { #>
+											<option value="thumbnail">
+												Thumbnail &ndash; {{ size.width }} &times; {{ size.height }}
+											</option>
+										<# } #>
+																			<#
+										var size = data.sizes['medium'];
+										if ( size ) { #>
+											<option value="medium">
+												Medium &ndash; {{ size.width }} &times; {{ size.height }}
+											</option>
+										<# } #>
+																			<#
+										var size = data.sizes['large'];
+										if ( size ) { #>
+											<option value="large">
+												Large &ndash; {{ size.width }} &times; {{ size.height }}
+											</option>
+										<# } #>
+																			<#
+										var size = data.sizes['full'];
+										if ( size ) { #>
+											<option value="full">
+												Full Size &ndash; {{ size.width }} &times; {{ size.height }}
+											</option>
+										<# } #>
+																			<#
+										var size = data.sizes['a-thumbnail'];
+										if ( size ) { #>
+											<option value="a-thumbnail">
+												Awesome thumbnail &ndash; {{ size.width }} &times; {{ size.height }}
+											</option>
+										<# } #>
+																		<option value="custom">
+										Custom Size									</option>
+								</select>
+							</label>
+						<# } #>
+							<div class="custom-size<# if ( data.model.size !== 'custom' ) { #> hidden<# } #>">
+								<label><span>Width <small>(px)</small></span> <input data-setting="customWidth" type="number" step="1" value="{{ data.model.customWidth }}" /></label><span class="sep">&times;</span><label><span>Height <small>(px)</small></span><input data-setting="customHeight" type="number" step="1" value="{{ data.model.customHeight }}" /></label>
+							</div>
+					<# } #>
+
+					<div class="setting link-to">
+						<span>Link To</span>
+						<select data-setting="link">
+						<# if ( data.attachment ) { #>
+							<option value="file">
+								Media File							</option>
+							<option value="post">
+								Attachment Page							</option>
+						<# } else { #>
+							<option value="file">
+								Image URL							</option>
+						<# } #>
+							<option value="custom">
+								Custom URL							</option>
+							<option value="none">
+								None							</option>
+						</select>
+						<input type="text" class="link-to-custom" data-setting="linkUrl" />
+					</div>
+					<div class="advanced-section">
+						<h2><button type="button" class="button-link advanced-toggle">Advanced Options</button></h2>
+						<div class="advanced-settings hidden">
+							<div class="advanced-image">
+								<label class="setting title-text">
+									<span>Image Title Attribute</span>
+									<input type="text" data-setting="title" value="{{ data.model.title }}" />
+								</label>
+								<label class="setting extra-classes">
+									<span>Image CSS Class</span>
+									<input type="text" data-setting="extraClasses" value="{{ data.model.extraClasses }}" />
+								</label>
+							</div>
+							<div class="advanced-link">
+								<div class="setting link-target">
+									<label><input type="checkbox" data-setting="linkTargetBlank" value="_blank" <# if ( data.model.linkTargetBlank ) { #>checked="checked"<# } #>>Open link in a new tab</label>
+								</div>
+								<label class="setting link-rel">
+									<span>Link Rel</span>
+									<input type="text" data-setting="linkRel" value="{{ data.model.linkRel }}" />
+								</label>
+								<label class="setting link-class-name">
+									<span>Link CSS Class</span>
+									<input type="text" data-setting="linkClassName" value="{{ data.model.linkClassName }}" />
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/html" id="tmpl-image-editor">
+		<div id="media-head-{{ data.id }}"></div>
+		<div id="image-editor-{{ data.id }}"></div>
+	</script>
+
+	<script type="text/html" id="tmpl-audio-details">
+		<# var ext, html5types = {
+			mp3: wp.media.view.settings.embedMimes.mp3,
+			ogg: wp.media.view.settings.embedMimes.ogg
+		}; #>
+
+				<div class="media-embed media-embed-details">
+			<div class="embed-media-settings embed-audio-settings">
+				<audio style="visibility: hidden"
+	controls
+	class="wp-audio-shortcode"
+	width="{{ _.isUndefined( data.model.width ) ? 400 : data.model.width }}"
+	preload="{{ _.isUndefined( data.model.preload ) ? 'none' : data.model.preload }}"
+	<#
+	if ( ! _.isUndefined( data.model.autoplay ) && data.model.autoplay ) {
+		#> autoplay<#
+	}
+	if ( ! _.isUndefined( data.model.loop ) && data.model.loop ) {
+		#> loop<#
+	}
+	#>
+>
+	<# if ( ! _.isEmpty( data.model.src ) ) { #>
+	<source src="{{ data.model.src }}" type="{{ wp.media.view.settings.embedMimes[ data.model.src.split('.').pop() ] }}" />
+	<# } #>
+
+	<# if ( ! _.isEmpty( data.model.mp3 ) ) { #>
+	<source src="{{ data.model.mp3 }}" type="{{ wp.media.view.settings.embedMimes[ 'mp3' ] }}" />
+	<# } #>
+	<# if ( ! _.isEmpty( data.model.ogg ) ) { #>
+	<source src="{{ data.model.ogg }}" type="{{ wp.media.view.settings.embedMimes[ 'ogg' ] }}" />
+	<# } #>
+	<# if ( ! _.isEmpty( data.model.flac ) ) { #>
+	<source src="{{ data.model.flac }}" type="{{ wp.media.view.settings.embedMimes[ 'flac' ] }}" />
+	<# } #>
+	<# if ( ! _.isEmpty( data.model.m4a ) ) { #>
+	<source src="{{ data.model.m4a }}" type="{{ wp.media.view.settings.embedMimes[ 'm4a' ] }}" />
+	<# } #>
+	<# if ( ! _.isEmpty( data.model.wav ) ) { #>
+	<source src="{{ data.model.wav }}" type="{{ wp.media.view.settings.embedMimes[ 'wav' ] }}" />
+	<# } #>
+	</audio>
+
+				<# if ( ! _.isEmpty( data.model.src ) ) {
+					ext = data.model.src.split('.').pop();
+					if ( html5types[ ext ] ) {
+						delete html5types[ ext ];
+					}
+				#>
+				<label class="setting">
+					<span>SRC</span>
+					<input type="text" disabled="disabled" data-setting="src" value="{{ data.model.src }}" />
+					<button type="button" class="button-link remove-setting">Remove audio source</button>
+				</label>
+				<# } #>
+				<# if ( ! _.isEmpty( data.model.mp3 ) ) {
+					if ( ! _.isUndefined( html5types.mp3 ) ) {
+						delete html5types.mp3;
+					}
+				#>
+				<label class="setting">
+					<span>MP3</span>
+					<input type="text" disabled="disabled" data-setting="mp3" value="{{ data.model.mp3 }}" />
+					<button type="button" class="button-link remove-setting">Remove audio source</button>
+				</label>
+				<# } #>
+				<# if ( ! _.isEmpty( data.model.ogg ) ) {
+					if ( ! _.isUndefined( html5types.ogg ) ) {
+						delete html5types.ogg;
+					}
+				#>
+				<label class="setting">
+					<span>OGG</span>
+					<input type="text" disabled="disabled" data-setting="ogg" value="{{ data.model.ogg }}" />
+					<button type="button" class="button-link remove-setting">Remove audio source</button>
+				</label>
+				<# } #>
+				<# if ( ! _.isEmpty( data.model.flac ) ) {
+					if ( ! _.isUndefined( html5types.flac ) ) {
+						delete html5types.flac;
+					}
+				#>
+				<label class="setting">
+					<span>FLAC</span>
+					<input type="text" disabled="disabled" data-setting="flac" value="{{ data.model.flac }}" />
+					<button type="button" class="button-link remove-setting">Remove audio source</button>
+				</label>
+				<# } #>
+				<# if ( ! _.isEmpty( data.model.m4a ) ) {
+					if ( ! _.isUndefined( html5types.m4a ) ) {
+						delete html5types.m4a;
+					}
+				#>
+				<label class="setting">
+					<span>M4A</span>
+					<input type="text" disabled="disabled" data-setting="m4a" value="{{ data.model.m4a }}" />
+					<button type="button" class="button-link remove-setting">Remove audio source</button>
+				</label>
+				<# } #>
+				<# if ( ! _.isEmpty( data.model.wav ) ) {
+					if ( ! _.isUndefined( html5types.wav ) ) {
+						delete html5types.wav;
+					}
+				#>
+				<label class="setting">
+					<span>WAV</span>
+					<input type="text" disabled="disabled" data-setting="wav" value="{{ data.model.wav }}" />
+					<button type="button" class="button-link remove-setting">Remove audio source</button>
+				</label>
+				<# } #>
+				
+				<# if ( ! _.isEmpty( html5types ) ) { #>
+				<div class="setting">
+					<span>Add alternate sources for maximum HTML5 playback:</span>
+					<div class="button-large">
+					<# _.each( html5types, function (mime, type) { #>
+					<button class="button add-media-source" data-mime="{{ mime }}">{{ type }}</button>
+					<# } ) #>
+					</div>
+				</div>
+				<# } #>
+
+				<div class="setting preload">
+					<span>Preload</span>
+					<div class="button-group button-large" data-setting="preload">
+						<button class="button" value="auto">Auto</button>
+						<button class="button" value="metadata">Metadata</button>
+						<button class="button active" value="none">None</button>
+					</div>
+				</div>
+
+				<label class="setting checkbox-setting autoplay">
+					<input type="checkbox" data-setting="autoplay" />
+					<span>Autoplay</span>
+				</label>
+
+				<label class="setting checkbox-setting">
+					<input type="checkbox" data-setting="loop" />
+					<span>Loop</span>
+				</label>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/html" id="tmpl-video-details">
+		<# var ext, html5types = {
+			mp4: wp.media.view.settings.embedMimes.mp4,
+			ogv: wp.media.view.settings.embedMimes.ogv,
+			webm: wp.media.view.settings.embedMimes.webm
+		}; #>
+
+				<div class="media-embed media-embed-details">
+			<div class="embed-media-settings embed-video-settings">
+				<div class="wp-video-holder">
+				<#
+				var w = ! data.model.width || data.model.width > 640 ? 640 : data.model.width,
+					h = ! data.model.height ? 360 : data.model.height;
+
+				if ( data.model.width && w !== data.model.width ) {
+					h = Math.ceil( ( h * w ) / data.model.width );
+				}
+				#>
+
+				<#  var w_rule = '', classes = [],
+		w, h, settings = wp.media.view.settings,
+		isYouTube = isVimeo = false;
+
+	if ( ! _.isEmpty( data.model.src ) ) {
+		isYouTube = data.model.src.match(/youtube|youtu\.be/);
+		isVimeo = -1 !== data.model.src.indexOf('vimeo');
+	}
+
+	if ( settings.contentWidth && data.model.width >= settings.contentWidth ) {
+		w = settings.contentWidth;
+	} else {
+		w = data.model.width;
+	}
+
+	if ( w !== data.model.width ) {
+		h = Math.ceil( ( data.model.height * w ) / data.model.width );
+	} else {
+		h = data.model.height;
+ 	}
+
+	if ( w ) {
+		w_rule = 'width: ' + w + 'px; ';
+	}
+
+	if ( isYouTube ) {
+		classes.push( 'youtube-video' );
+	}
+
+	if ( isVimeo ) {
+		classes.push( 'vimeo-video' );
+	}
+
+#>
+<div style="{{ w_rule }}" class="wp-video">
+<video controls
+	class="wp-video-shortcode {{ classes.join( ' ' ) }}"
+	<# if ( w ) { #>width="{{ w }}"<# } #>
+	<# if ( h ) { #>height="{{ h }}"<# } #>
+	<#
+		if ( ! _.isUndefined( data.model.poster ) && data.model.poster ) {
+			#> poster="{{ data.model.poster }}"<#
+		} #>
+		preload="{{ _.isUndefined( data.model.preload ) ? 'metadata' : data.model.preload }}"<#
+	 if ( ! _.isUndefined( data.model.autoplay ) && data.model.autoplay ) {
+		#> autoplay<#
+	}
+	 if ( ! _.isUndefined( data.model.loop ) && data.model.loop ) {
+		#> loop<#
+	}
+	#>
+>
+	<# if ( ! _.isEmpty( data.model.src ) ) {
+		if ( isYouTube ) { #>
+		<source src="{{ data.model.src }}" type="video/youtube" />
+		<# } else if ( isVimeo ) { #>
+		<source src="{{ data.model.src }}" type="video/vimeo" />
+		<# } else { #>
+		<source src="{{ data.model.src }}" type="{{ settings.embedMimes[ data.model.src.split('.').pop() ] }}" />
+		<# }
+	} #>
+
+	<# if ( data.model.mp4 ) { #>
+	<source src="{{ data.model.mp4 }}" type="{{ settings.embedMimes[ 'mp4' ] }}" />
+	<# } #>
+	<# if ( data.model.m4v ) { #>
+	<source src="{{ data.model.m4v }}" type="{{ settings.embedMimes[ 'm4v' ] }}" />
+	<# } #>
+	<# if ( data.model.webm ) { #>
+	<source src="{{ data.model.webm }}" type="{{ settings.embedMimes[ 'webm' ] }}" />
+	<# } #>
+	<# if ( data.model.ogv ) { #>
+	<source src="{{ data.model.ogv }}" type="{{ settings.embedMimes[ 'ogv' ] }}" />
+	<# } #>
+	<# if ( data.model.flv ) { #>
+	<source src="{{ data.model.flv }}" type="{{ settings.embedMimes[ 'flv' ] }}" />
+	<# } #>
+		{{{ data.model.content }}}
+</video>
+</div>
+
+				<# if ( ! _.isEmpty( data.model.src ) ) {
+					ext = data.model.src.split('.').pop();
+					if ( html5types[ ext ] ) {
+						delete html5types[ ext ];
+					}
+				#>
+				<label class="setting">
+					<span>SRC</span>
+					<input type="text" disabled="disabled" data-setting="src" value="{{ data.model.src }}" />
+					<button type="button" class="button-link remove-setting">Remove video source</button>
+				</label>
+				<# } #>
+				<# if ( ! _.isEmpty( data.model.mp4 ) ) {
+					if ( ! _.isUndefined( html5types.mp4 ) ) {
+						delete html5types.mp4;
+					}
+				#>
+				<label class="setting">
+					<span>MP4</span>
+					<input type="text" disabled="disabled" data-setting="mp4" value="{{ data.model.mp4 }}" />
+					<button type="button" class="button-link remove-setting">Remove video source</button>
+				</label>
+				<# } #>
+				<# if ( ! _.isEmpty( data.model.m4v ) ) {
+					if ( ! _.isUndefined( html5types.m4v ) ) {
+						delete html5types.m4v;
+					}
+				#>
+				<label class="setting">
+					<span>M4V</span>
+					<input type="text" disabled="disabled" data-setting="m4v" value="{{ data.model.m4v }}" />
+					<button type="button" class="button-link remove-setting">Remove video source</button>
+				</label>
+				<# } #>
+				<# if ( ! _.isEmpty( data.model.webm ) ) {
+					if ( ! _.isUndefined( html5types.webm ) ) {
+						delete html5types.webm;
+					}
+				#>
+				<label class="setting">
+					<span>WEBM</span>
+					<input type="text" disabled="disabled" data-setting="webm" value="{{ data.model.webm }}" />
+					<button type="button" class="button-link remove-setting">Remove video source</button>
+				</label>
+				<# } #>
+				<# if ( ! _.isEmpty( data.model.ogv ) ) {
+					if ( ! _.isUndefined( html5types.ogv ) ) {
+						delete html5types.ogv;
+					}
+				#>
+				<label class="setting">
+					<span>OGV</span>
+					<input type="text" disabled="disabled" data-setting="ogv" value="{{ data.model.ogv }}" />
+					<button type="button" class="button-link remove-setting">Remove video source</button>
+				</label>
+				<# } #>
+				<# if ( ! _.isEmpty( data.model.flv ) ) {
+					if ( ! _.isUndefined( html5types.flv ) ) {
+						delete html5types.flv;
+					}
+				#>
+				<label class="setting">
+					<span>FLV</span>
+					<input type="text" disabled="disabled" data-setting="flv" value="{{ data.model.flv }}" />
+					<button type="button" class="button-link remove-setting">Remove video source</button>
+				</label>
+				<# } #>
+								</div>
+
+				<# if ( ! _.isEmpty( html5types ) ) { #>
+				<div class="setting">
+					<span>Add alternate sources for maximum HTML5 playback:</span>
+					<div class="button-large">
+					<# _.each( html5types, function (mime, type) { #>
+					<button class="button add-media-source" data-mime="{{ mime }}">{{ type }}</button>
+					<# } ) #>
+					</div>
+				</div>
+				<# } #>
+
+				<# if ( ! _.isEmpty( data.model.poster ) ) { #>
+				<label class="setting">
+					<span>Poster Image</span>
+					<input type="text" disabled="disabled" data-setting="poster" value="{{ data.model.poster }}" />
+					<button type="button" class="button-link remove-setting">Remove poster image</button>
+				</label>
+				<# } #>
+				<div class="setting preload">
+					<span>Preload</span>
+					<div class="button-group button-large" data-setting="preload">
+						<button class="button" value="auto">Auto</button>
+						<button class="button" value="metadata">Metadata</button>
+						<button class="button active" value="none">None</button>
+					</div>
+				</div>
+
+				<label class="setting checkbox-setting autoplay">
+					<input type="checkbox" data-setting="autoplay" />
+					<span>Autoplay</span>
+				</label>
+
+				<label class="setting checkbox-setting">
+					<input type="checkbox" data-setting="loop" />
+					<span>Loop</span>
+				</label>
+
+				<label class="setting" data-setting="content">
+					<span>Tracks (subtitles, captions, descriptions, chapters, or metadata)</span>
+					<#
+					var content = '';
+					if ( ! _.isEmpty( data.model.content ) ) {
+						var tracks = jQuery( data.model.content ).filter( 'track' );
+						_.each( tracks.toArray(), function (track) {
+							content += track.outerHTML; #>
+						<p>
+							<input class="content-track" type="text" value="{{ track.outerHTML }}" />
+							<button type="button" class="button-link remove-setting remove-track">Remove video track</button>
+						</p>
+						<# } ); #>
+					<# } else { #>
+					<em>There are no associated subtitles.</em>
+					<# } #>
+					<textarea class="hidden content-setting">{{ content }}</textarea>
+				</label>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/html" id="tmpl-editor-gallery">
+		<# if ( data.attachments.length ) { #>
+			<div class="gallery gallery-columns-{{ data.columns }}">
+				<# _.each( data.attachments, function( attachment, index ) { #>
+					<dl class="gallery-item">
+						<dt class="gallery-icon">
+							<# if ( attachment.thumbnail ) { #>
+								<img src="{{ attachment.thumbnail.url }}" width="{{ attachment.thumbnail.width }}" height="{{ attachment.thumbnail.height }}" alt="" />
+							<# } else { #>
+								<img src="{{ attachment.url }}" alt="" />
+							<# } #>
+						</dt>
+						<# if ( attachment.caption ) { #>
+							<dd class="wp-caption-text gallery-caption">
+								{{{ data.verifyHTML( attachment.caption ) }}}
+							</dd>
+						<# } #>
+					</dl>
+					<# if ( index % data.columns === data.columns - 1 ) { #>
+						<br style="clear: both;">
+					<# } #>
+				<# } ); #>
+			</div>
+		<# } else { #>
+			<div class="wpview-error">
+				<div class="dashicons dashicons-format-gallery"></div><p>No items found.</p>
+			</div>
+		<# } #>
+	</script>
+
+	<script type="text/html" id="tmpl-crop-content">
+		<img class="crop-image" src="{{ data.url }}" alt="Image crop area preview. Requires mouse interaction.">
+		<div class="upload-errors"></div>
+	</script>
+
+	<script type="text/html" id="tmpl-site-icon-preview">
+		<h2>Preview</h2>
+		<strong aria-hidden="true">As a browser icon</strong>
+		<div class="favicon-preview">
+			<img src="https://www.coveros.com/wp-admin/images/browser.png" class="browser-preview" width="182" height="" alt="" />
+
+			<div class="favicon">
+				<img id="preview-favicon" src="{{ data.url }}" alt="Preview as a browser icon"/>
+			</div>
+			<span class="browser-title" aria-hidden="true">Coveros</span>
+		</div>
+
+		<strong aria-hidden="true">As an app icon</strong>
+		<div class="app-icon-preview">
+			<img id="preview-app-icon" src="{{ data.url }}" alt="Preview as an app icon"/>
+		</div>
+	</script>
+
+	<div class="evo_lightboxes" style="display:block">					<div class="evo_lightbox eventcard eventon_events_list" id="">
+						<div class="evo_content_in">													
+							<div class="evo_content_inin">
+								<div class="evo_lightbox_content">
+									<a class="evolbclose ">X</a>
+									<div class="evo_lightbox_body eventon_list_event evo_pop_body evcal_eventcard"> </div>
+								</div>
+							</div>							
+						</div>
+					</div>
+					</div><script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/core.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/widget.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/accordion.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/tabs.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/effect.min.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var wpcf7 = {"apiSettings":{"root":"https:\/\/www.coveros.com\/wp-json\/contact-form-7\/v1","namespace":"contact-form-7\/v1"},"recaptcha":{"messages":{"empty":"Please verify that you are not a robot."}}};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/scripts.js(1).download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/jquery.form.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/devicepx-jetpack.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/blankshield.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/block-tabnapping.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/gprofiles.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/wpgroho.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/progressbar.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/bootstrap.min.js(1).download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/owl-carousel.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/count-to.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/visible.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/parallax.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/plugins.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/scripts.js(2).download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/eventon_functions.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/handlebars.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/jquery.mobile.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/jquery.mousewheel.min.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var the_ajax_script = {"ajaxurl":"https:\/\/www.coveros.com\/wp-admin\/admin-ajax.php","postnonce":"ae201daee8"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/eventon_script.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/underscore.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/shortcode.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/backbone.min.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var _wpUtilSettings = {"ajax":{"url":"\/wp-admin\/admin-ajax.php"}};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/wp-util.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/wp-backbone.min.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var _wpMediaModelsL10n = {"settings":{"ajaxurl":"\/wp-admin\/admin-ajax.php","post":{"id":0}}};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/media-models.min.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var pluploadL10n = {"queue_limit_exceeded":"You have attempted to queue too many files.","file_exceeds_size_limit":"%s exceeds the maximum upload size for this site.","zero_byte_file":"This file is empty. Please try another.","invalid_filetype":"Sorry, this file type is not permitted for security reasons.","not_an_image":"This file is not an image. Please try another.","image_memory_exceeded":"Memory exceeded. Please try another smaller file.","image_dimensions_exceeded":"This is larger than the maximum size. Please try another.","default_error":"An error occurred in the upload. Please try again later.","missing_upload_url":"There was a configuration error. Please contact the server administrator.","upload_limit_exceeded":"You may only upload 1 file.","http_error":"HTTP error.","upload_failed":"Upload failed.","big_upload_failed":"Please try uploading this file with the %1$sbrowser uploader%2$s.","big_upload_queued":"%s exceeds the maximum upload size for the multi-file uploader when used in your browser.","io_error":"IO error.","security_error":"Security error.","file_cancelled":"File canceled.","upload_stopped":"Upload stopped.","dismiss":"Dismiss","crunching":"Crunching\u2026","deleted":"moved to the trash.","error_uploading":"\u201c%s\u201d has failed to upload."};
+var _wpPluploadSettings = {"defaults":{"file_data_name":"async-upload","url":"\/wp-admin\/async-upload.php","filters":{"max_file_size":"2097152b","mime_types":[{"extensions":"jpg,jpeg,jpe,gif,png,bmp,tiff,tif,ico,asf,asx,wmv,wmx,wm,avi,divx,flv,mov,qt,mpeg,mpg,mpe,mp4,m4v,ogv,webm,mkv,3gp,3gpp,3g2,3gp2,txt,asc,c,cc,h,srt,csv,tsv,ics,rtx,css,vtt,dfxp,mp3,m4a,m4b,aac,ra,ram,wav,ogg,oga,flac,mid,midi,wma,wax,mka,rtf,pdf,class,tar,zip,gz,gzip,rar,7z,psd,xcf,doc,pot,pps,ppt,wri,xla,xls,xlt,xlw,mdb,mpp,docx,docm,dotx,dotm,xlsx,xlsm,xlsb,xltx,xltm,xlam,pptx,pptm,ppsx,ppsm,potx,potm,ppam,sldx,sldm,onetoc,onetoc2,onetmp,onepkg,oxps,xps,odt,odp,ods,odg,odc,odb,odf,wp,wpd,key,numbers,pages,dat,svg"}]},"multipart_params":{"action":"upload-attachment","_wpnonce":"66e70b433f"}},"browser":{"mobile":false,"supported":true},"limitExceeded":false};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/wp-plupload.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/mouse.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/sortable.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/wp-mediaelement.min.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var wpApiSettings = {"root":"https:\/\/www.coveros.com\/wp-json\/","nonce":"af7579e5f9","versionString":"wp\/v2\/"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/api-request.min.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var _wpMediaViewsL10n = {"url":"URL","addMedia":"Add Media","search":"Search","select":"Select","cancel":"Cancel","update":"Update","replace":"Replace","remove":"Remove","back":"Back","selected":"%d selected","dragInfo":"Drag and drop to reorder media files.","uploadFilesTitle":"Upload Files","uploadImagesTitle":"Upload Images","mediaLibraryTitle":"Media Library","insertMediaTitle":"Add Media","createNewGallery":"Create a new gallery","createNewPlaylist":"Create a new playlist","createNewVideoPlaylist":"Create a new video playlist","returnToLibrary":"\u2190 Return to library","allMediaItems":"All media items","allDates":"All dates","noItemsFound":"No items found.","insertIntoPost":"Insert into post","unattached":"Unattached","mine":"Mine","trash":"Trash","uploadedToThisPost":"Uploaded to this post","warnDelete":"You are about to permanently delete this item from your site.\nThis action cannot be undone.\n 'Cancel' to stop, 'OK' to delete.","warnBulkDelete":"You are about to permanently delete these items from your site.\nThis action cannot be undone.\n 'Cancel' to stop, 'OK' to delete.","warnBulkTrash":"You are about to trash these items.\n  'Cancel' to stop, 'OK' to delete.","bulkSelect":"Bulk Select","cancelSelection":"Cancel Selection","trashSelected":"Trash Selected","untrashSelected":"Untrash Selected","deleteSelected":"Delete Selected","deletePermanently":"Delete Permanently","apply":"Apply","filterByDate":"Filter by date","filterByType":"Filter by type","searchMediaLabel":"Search Media","searchMediaPlaceholder":"Search media items...","noMedia":"No media files found.","attachmentDetails":"Attachment Details","insertFromUrlTitle":"Insert from URL","setFeaturedImageTitle":"Featured Image","setFeaturedImage":"Set featured image","createGalleryTitle":"Create Gallery","editGalleryTitle":"Edit Gallery","cancelGalleryTitle":"\u2190 Cancel Gallery","insertGallery":"Insert gallery","updateGallery":"Update gallery","addToGallery":"Add to gallery","addToGalleryTitle":"Add to Gallery","reverseOrder":"Reverse order","imageDetailsTitle":"Image Details","imageReplaceTitle":"Replace Image","imageDetailsCancel":"Cancel Edit","editImage":"Edit Image","chooseImage":"Choose Image","selectAndCrop":"Select and Crop","skipCropping":"Skip Cropping","cropImage":"Crop Image","cropYourImage":"Crop your image","cropping":"Cropping\u2026","suggestedDimensions":"Suggested image dimensions: %1$s by %2$s pixels.","cropError":"There has been an error cropping your image.","audioDetailsTitle":"Audio Details","audioReplaceTitle":"Replace Audio","audioAddSourceTitle":"Add Audio Source","audioDetailsCancel":"Cancel Edit","videoDetailsTitle":"Video Details","videoReplaceTitle":"Replace Video","videoAddSourceTitle":"Add Video Source","videoDetailsCancel":"Cancel Edit","videoSelectPosterImageTitle":"Select Poster Image","videoAddTrackTitle":"Add Subtitles","playlistDragInfo":"Drag and drop to reorder tracks.","createPlaylistTitle":"Create Audio Playlist","editPlaylistTitle":"Edit Audio Playlist","cancelPlaylistTitle":"\u2190 Cancel Audio Playlist","insertPlaylist":"Insert audio playlist","updatePlaylist":"Update audio playlist","addToPlaylist":"Add to audio playlist","addToPlaylistTitle":"Add to Audio Playlist","videoPlaylistDragInfo":"Drag and drop to reorder videos.","createVideoPlaylistTitle":"Create Video Playlist","editVideoPlaylistTitle":"Edit Video Playlist","cancelVideoPlaylistTitle":"\u2190 Cancel Video Playlist","insertVideoPlaylist":"Insert video playlist","updateVideoPlaylist":"Update video playlist","addToVideoPlaylist":"Add to video playlist","addToVideoPlaylistTitle":"Add to Video Playlist","settings":{"tabs":[],"tabUrl":"https:\/\/www.coveros.com\/wp-admin\/media-upload.php?chromeless=1","mimeTypes":{"image":"Images","audio":"Audio","video":"Video"},"captions":true,"nonce":{"sendToEditor":"3ff83451e1"},"post":{"id":899},"defaultProps":{"link":"file","align":"","size":""},"attachmentCounts":{"audio":1,"video":1},"oEmbedProxyUrl":"https:\/\/www.coveros.com\/wp-json\/oembed\/1.0\/proxy","embedExts":["mp3","ogg","flac","m4a","wav","mp4","m4v","webm","ogv","flv"],"embedMimes":{"mp3":"audio\/mpeg","ogg":"audio\/ogg","flac":"audio\/flac","m4a":"audio\/mpeg","wav":"audio\/wav","mp4":"video\/mp4","m4v":"video\/mp4","webm":"video\/webm","ogv":"video\/ogg","flv":"video\/x-flv"},"contentWidth":640,"months":[{"year":"2019","month":"1","text":"January 2019"},{"year":"2018","month":"12","text":"December 2018"},{"year":"2018","month":"11","text":"November 2018"},{"year":"2018","month":"10","text":"October 2018"},{"year":"2018","month":"9","text":"September 2018"},{"year":"2018","month":"8","text":"August 2018"},{"year":"2018","month":"7","text":"July 2018"},{"year":"2018","month":"6","text":"June 2018"},{"year":"2018","month":"5","text":"May 2018"},{"year":"2018","month":"4","text":"April 2018"},{"year":"2018","month":"3","text":"March 2018"},{"year":"2018","month":"2","text":"February 2018"},{"year":"2018","month":"1","text":"January 2018"},{"year":"2017","month":"12","text":"December 2017"},{"year":"2017","month":"11","text":"November 2017"},{"year":"2017","month":"10","text":"October 2017"},{"year":"2017","month":"9","text":"September 2017"},{"year":"2017","month":"8","text":"August 2017"},{"year":"2017","month":"7","text":"July 2017"},{"year":"2017","month":"6","text":"June 2017"},{"year":"2017","month":"5","text":"May 2017"},{"year":"2017","month":"4","text":"April 2017"},{"year":"2017","month":"3","text":"March 2017"},{"year":"2017","month":"2","text":"February 2017"},{"year":"2017","month":"1","text":"January 2017"},{"year":"2016","month":"12","text":"December 2016"},{"year":"2016","month":"11","text":"November 2016"},{"year":"2016","month":"10","text":"October 2016"},{"year":"2016","month":"9","text":"September 2016"},{"year":"2016","month":"8","text":"August 2016"},{"year":"2016","month":"7","text":"July 2016"},{"year":"2016","month":"6","text":"June 2016"},{"year":"2016","month":"5","text":"May 2016"},{"year":"2016","month":"4","text":"April 2016"},{"year":"2016","month":"3","text":"March 2016"},{"year":"2016","month":"2","text":"February 2016"},{"year":"2016","month":"1","text":"January 2016"},{"year":"2015","month":"12","text":"December 2015"},{"year":"2015","month":"11","text":"November 2015"},{"year":"2015","month":"10","text":"October 2015"},{"year":"2015","month":"9","text":"September 2015"},{"year":"2015","month":"8","text":"August 2015"},{"year":"2015","month":"7","text":"July 2015"},{"year":"2015","month":"6","text":"June 2015"},{"year":"2015","month":"5","text":"May 2015"},{"year":"2015","month":"4","text":"April 2015"},{"year":"2015","month":"3","text":"March 2015"},{"year":"2015","month":"2","text":"February 2015"},{"year":"2015","month":"1","text":"January 2015"},{"year":"2014","month":"12","text":"December 2014"},{"year":"2014","month":"11","text":"November 2014"},{"year":"2014","month":"10","text":"October 2014"},{"year":"2014","month":"9","text":"September 2014"},{"year":"2014","month":"8","text":"August 2014"},{"year":"2014","month":"7","text":"July 2014"},{"year":"2014","month":"6","text":"June 2014"},{"year":"2014","month":"5","text":"May 2014"},{"year":"2014","month":"3","text":"March 2014"},{"year":"2014","month":"1","text":"January 2014"},{"year":"2013","month":"12","text":"December 2013"},{"year":"2013","month":"11","text":"November 2013"},{"year":"2013","month":"10","text":"October 2013"},{"year":"2013","month":"8","text":"August 2013"},{"year":"2013","month":"7","text":"July 2013"},{"year":"2013","month":"6","text":"June 2013"},{"year":"2013","month":"5","text":"May 2013"},{"year":"2013","month":"4","text":"April 2013"}],"mediaTrash":0}};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/media-views.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/media-editor.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/media-audiovideo.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/widget-upload-image.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var eei18n = {"ajax_url":"https:\/\/www.coveros.com\/wp-admin\/admin-ajax.php","wp_debug":"","registration_expiration_notice":"<h4 class=\"important-notice\">We're sorry, but your registration time has expired.<\/h4><br \/><p>If you still wish to complete your registration, please return to the <a href=\"https:\/\/www.coveros.com\/events\/\" title=\"Event List\">Event List<\/a> and reselect your tickets if available. Please accept our apologies for any inconvenience this may have caused.<\/p>","iframe_tickets_added":"Success! Please click \"View Event Cart\" to proceed with your registration.","ans_no_country":"In order to proceed, you need to select the Country that your State\/Province belongs to.","ans_no_name":"In order to proceed, you need to enter the name of your State\/Province.","ans_no_abbreviation":"In order to proceed, you need to enter an abbreviation for the name of your State\/Province.","ans_save_success":"The new state was successfully saved to the database.","ans_server_save_error":"An unknown error has occurred on the server while saving the new state to the database.","please_select_date_filter_notice":"please select a datetime","no_promotions_code":"Please enter a valid Promotion Code."};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/espresso_core.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/multi_event_registration.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/queuehandler.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/fitvids.min.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/wp-embed.min.js.download"></script>
+<script async="async" type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/form.js.download"></script>
+<script type="text/javascript" src="./Calling Python Code from C++ - Coveros_files/e-201903.js.download" async="async" defer="defer"></script>
+<script type="text/javascript">
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:6.4.2',blog:'67644665',post:'899',tz:'-5',srv:'www.coveros.com'} ]);
+	_stq.push([ 'clickTrackerInit', '67644665', '899' ]);
+</script>
+
+<img src="./Calling Python Code from C++ - Coveros_files/g.gif" alt=":)" width="6" height="5" id="wpstats" scale="0"></body></html>

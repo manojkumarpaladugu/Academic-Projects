@@ -1,0 +1,180 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+ 
+.accordions .accordions-head {
+	cursor: pointer;
+	padding: 10px;
+	display: flex; 
+	align-items: center;
+}
+
+.accordions .accordions-head-title {
+  margin: 0 10px;
+  width:100%;
+}
+
+
+.accordions .accordions-head .accordion-minus{
+	display:none;
+	}
+
+.accordions .accordions-head.ui-state-active .accordion-plus{
+	display:none;
+	}
+
+.accordions .accordions-head.ui-state-active .accordion-minus{
+	display:inline-block;
+	}
+
+
+.accordions .accordion-content {
+  background: #fff none repeat scroll 0 0;
+  padding: 10px;
+}
+
+.accordions .accordions-head-title, .accordions .accordion-icons {
+
+}
+
+
+.accordions .accordion-icons.left {
+  float: left;
+}
+
+.accordions .accordion-icons.right{
+float: right;
+}
+
+
+
+
+.accordions-themes{}
+
+/*########### flat ##############*/
+.accordions-themes.flat{}
+
+.accordions.flat .accordions-head {
+  border: medium none;
+  border-radius: 0;
+}
+
+.accordions.flat .accordion-content {
+  border: medium none;
+  border-radius: 0;
+}
+
+
+
+/*########### flat ##############*/
+.accordions-themes.rounded{}
+
+.accordions.rounded .accordions-head {
+  border: medium none;
+  border-radius: 35px;
+}
+
+.accordions.rounded .accordion-content{
+  border-radius: 35px;
+  border: medium none;
+}
+
+
+/*########### semi-rounded ##############*/
+.accordions-themes.semi-rounded{}
+
+.accordions.semi-rounded .accordions-head {
+  border-radius: 8px;
+  border: medium none;
+}
+
+.accordions.semi-rounded .accordion-content{
+  border-radius: 8px;
+  border: medium none;
+}
+
+
+/*########### shadow ##############*/
+.accordions-themes.shadow{}
+
+.accordions.shadow .accordions-head {
+  box-shadow: 1px 7px 4px -4px rgb(129, 129, 129);
+  margin: 10px 0;
+  border: medium none;
+}
+
+.accordions.shadow .accordion-content{
+	border: medium none;
+
+}
+
+
+/*########### rounded-top ##############*/
+.accordions-themes.rounded-top{}
+
+.accordions.rounded-top .accordions-head {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border: medium none;
+}
+
+.accordions.rounded-top .accordion-content {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border: medium none;
+}
+
+
+
+
+
+/*########### border-bottom ##############*/
+.accordions-themes.border-bottom{}
+
+.accordions.border-bottom .accordions-head {
+  border-bottom: 1px solid #666;
+  border: medium none;
+}
+
+.accordions.border-bottom .accordion-content{
+	border: medium none;
+
+}
+
+
+
+/*########### border-top ##############*/
+.accordions-themes.border-top{}
+
+.accordions.border-top .accordions-head {
+  border-top: 1px solid #666;
+  border: medium none;
+}
+
+.accordions.border-top .accordion-content{
+	border: medium none;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,10 @@
+extern delay_ms(unsigned int);
+extern void LCD_init(void);
+extern void LCD_cmd(char);
+extern void LCD_str(char*,char);
+extern void Serial_init(void);
+extern char Serial_Rx(void);
+extern void Serial_Tx(char);
+extern void Serial_Tx_str(char*);
+extern void message(void);
+extern float readDS1621(void);

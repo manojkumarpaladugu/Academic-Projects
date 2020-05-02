@@ -1,0 +1,440 @@
+C51 COMPILER V9.53.0.0   HSA                                                               04/20/2018 13:14:19 PAGE 1   
+
+
+C51 COMPILER V9.53.0.0, COMPILATION OF MODULE HSA
+OBJECT MODULE PLACED IN hsa.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE hsa.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include"declarations.h"
+   3          sbit GAS=P1^0;
+   4          sbit LDR=P1^3;
+   5          sbit PIR=P1^4;
+   6          sbit TMP=P1^5;
+   7          sbit WND=P1^6;
+   8          sbit SMODE_LED=P1^7; //security mode led
+   9          sbit BUZ=P2^2;
+  10          sbit GAS_LED=P2^3;
+  11          sbit TMP_LED=P2^4;
+  12          sbit AMODE_LED=P2^5; //automation mode led
+  13          sbit INTR_LED=P2^6;  //intruder led
+  14          sbit WND_LED=P2^7;
+  15          sbit FAN=P3^2;
+  16          float f;
+  17          char *f2str(float f)
+  18          {
+  19   1        char str[6];
+  20   1        int i,j;
+  21   1        i=f*100;
+  22   1        for(j=4;j>=0;j--)
+  23   1        {
+  24   2          if(j==2)
+  25   2          {
+  26   3            str[j]='.';
+  27   3            continue;
+  28   3          }
+  29   2          str[j]=(i%10)+'0';
+  30   2          i/=10;
+  31   2        }
+  32   1        return str;
+  33   1      }
+  34          void security(bit flag)
+  35          {
+  36   1        bit flag1=0,flag2=0,flag3=0,flag4=0,flag5=0;
+  37   1        SMODE_LED=1;
+  38   1        LCD_cmd(0x01);
+  39   1        LCD_cmd(0x80);
+  40   1        LCD_str("TURNING ON",1);
+  41   1        delay_ms(15);
+  42   1        LCD_cmd(0xc0);
+  43   1        LCD_str("SECURITY MODE",1);
+  44   1        delay_ms(250);
+  45   1        message();
+  46   1        Serial_Tx_str("Security Turned ON");
+  47   1        delay_ms(50);
+  48   1        Serial_Tx(26);
+  49   1        while(1)
+  50   1        {
+  51   2          f=readDS1621();
+  52   2          if(!PIR && f<=35.0f && GAS && WND)
+  53   2          {
+  54   3            if(f<=33.0f)
+  55   3            {
+C51 COMPILER V9.53.0.0   HSA                                                               04/20/2018 13:14:19 PAGE 2   
+
+  56   4              FAN=0;
+  57   4              TMP_LED=0;
+  58   4            }
+  59   3            BUZ=0;
+  60   3            INTR_LED=0;
+  61   3            GAS_LED=0;
+  62   3            WND_LED=0;
+  63   3            flag2=flag3=flag4=flag5=0;
+  64   3            if(flag1==0)
+  65   3              LCD_cmd(0x01);
+  66   3            LCD_cmd(0x81);
+  67   3            LCD_str("SECURITY IS ON",0);
+  68   3            LCD_cmd(0xc0);
+  69   3            LCD_str("Everything is OK",0);
+  70   3            flag1=1;
+  71   3            flag2=0;
+  72   3            if(!LDR && flag==0)
+  73   3            {
+  74   4              LCD_cmd(0x01);
+  75   4              LCD_cmd(0x80);
+  76   4              LCD_str("TURNING OFF",0);
+  77   4              LCD_cmd(0xc0);
+  78   4              LCD_str("SECURITY MODE",0);
+  79   4              delay_ms(1000);
+  80   4              message();
+  81   4              Serial_Tx_str("Security Turned OFF");
+  82   4              delay_ms(50);
+  83   4              Serial_Tx(26);
+  84   4              SMODE_LED=0;
+  85   4              return;
+  86   4            }
+  87   3          }
+  88   2          else
+  89   2          {
+  90   3            if(PIR)
+  91   3            {
+  92   4              INTR_LED=1;  //intruder led on
+  93   4              BUZ=1;
+  94   4              if(flag2==0)
+  95   4              {
+  96   5                message();
+  97   5                Serial_Tx_str("Intruder is in your place.");
+  98   5                delay_ms(50);
+  99   5                Serial_Tx(26);
+ 100   5              }
+ 101   4              LCD_cmd(0x01);
+ 102   4              LCD_cmd(0x81);
+ 103   4              LCD_str("INTRUDER IS IN",1);
+ 104   4              LCD_cmd(0xc3);
+ 105   4              LCD_str("YOUR PLACE",1);
+ 106   4              if(f<=33.0f)
+ 107   4              {
+ 108   5                TMP_LED=0;
+ 109   5                FAN=0;
+ 110   5              }
+ 111   4              if(GAS)
+ 112   4              {
+ 113   5                GAS_LED=0;
+ 114   5                BUZ=1;
+ 115   5              }
+ 116   4              if(WND)
+ 117   4              {
+C51 COMPILER V9.53.0.0   HSA                                                               04/20/2018 13:14:19 PAGE 3   
+
+ 118   5                WND_LED=0;
+ 119   5                BUZ=0;
+ 120   5              }
+ 121   4              flag1=0;
+ 122   4              flag2=1;
+ 123   4              delay_ms(250);
+ 124   4            }
+ 125   3            if(f>35.0f)
+ 126   3            {
+ 127   4              TMP_LED=1;
+ 128   4              FAN=1;
+ 129   4              if(flag3==0)
+ 130   4              {
+ 131   5                message();
+ 132   5                Serial_Tx_str("Temparature is high.");
+ 133   5                delay_ms(50);
+ 134   5                Serial_Tx(26);
+ 135   5              }
+ 136   4              LCD_cmd(0x01);
+ 137   4              LCD_cmd(0x81);
+ 138   4              LCD_str("TEMPERATURE IS",1);
+ 139   4              LCD_cmd(0xc3);
+ 140   4              LCD_str("HIGH",1);
+ 141   4              LCD_cmd(0xc8);
+ 142   4              LCD_str(f2str(f),1);
+ 143   4              if(!PIR)
+ 144   4              {
+ 145   5                INTR_LED=0;
+ 146   5                BUZ=0;
+ 147   5              }
+ 148   4              if(GAS)
+ 149   4              {
+ 150   5                GAS_LED=0;
+ 151   5                BUZ=1;
+ 152   5              }
+ 153   4              if(WND)
+ 154   4              {
+ 155   5                WND_LED=0;
+ 156   5                BUZ=0;
+ 157   5              }
+ 158   4              flag1=0;
+ 159   4              flag3=1;
+ 160   4              delay_ms(250);
+ 161   4            }
+ 162   3            if(!GAS)
+ 163   3            {
+ 164   4              GAS_LED=1;
+ 165   4              BUZ=1;
+ 166   4              if(flag4==0)
+ 167   4              {
+ 168   5                message();
+ 169   5                Serial_Tx_str("LPG/smoke is detected");
+ 170   5                delay_ms(50);
+ 171   5                Serial_Tx(26);
+ 172   5              }
+ 173   4              LCD_cmd(0x01);
+ 174   4              LCD_cmd(0x84);
+ 175   4              LCD_str("LPG/SMOKE",1);
+ 176   4              LCD_cmd(0xc4);
+ 177   4              LCD_str("DETECTED",1);
+ 178   4              if(!PIR)
+ 179   4              {
+C51 COMPILER V9.53.0.0   HSA                                                               04/20/2018 13:14:19 PAGE 4   
+
+ 180   5                INTR_LED=0;
+ 181   5                BUZ=0;
+ 182   5              }
+ 183   4              if(f<=33.0f)
+ 184   4              {
+ 185   5                TMP_LED=0;
+ 186   5                FAN=0;
+ 187   5              }
+ 188   4              if(WND)
+ 189   4              {
+ 190   5                WND_LED=0;
+ 191   5                BUZ=0;
+ 192   5              }
+ 193   4              flag1=0;
+ 194   4              flag4=1;
+ 195   4              delay_ms(250);
+ 196   4            }
+ 197   3            if(!WND)
+ 198   3            {
+ 199   4              WND_LED=1;
+ 200   4              BUZ=1;
+ 201   4              if(flag5==0)
+ 202   4              {
+ 203   5                message();
+ 204   5                Serial_Tx_str("House doors/windows opened");
+ 205   5                delay_ms(50);
+ 206   5                Serial_Tx(26);
+ 207   5              }
+ 208   4              LCD_cmd(0x01);
+ 209   4              LCD_cmd(0x82);
+ 210   4              LCD_str("DOORS/WINDOWS",1);
+ 211   4              LCD_cmd(0xc4);
+ 212   4              LCD_str("ARE OPEN",1);
+ 213   4              if(!PIR)
+ 214   4              {
+ 215   5                INTR_LED=0;
+ 216   5                BUZ=0;
+ 217   5              }
+ 218   4              if(f<=33.0f)
+ 219   4              {
+ 220   5                TMP_LED=0;
+ 221   5                FAN=0;
+ 222   5              }
+ 223   4              if(GAS)
+ 224   4              {
+ 225   5                GAS_LED=0;
+ 226   5                BUZ=0;
+ 227   5              }
+ 228   4              flag1=0;
+ 229   4              flag5=1;
+ 230   4              delay_ms(250);
+ 231   4            }
+ 232   3          }
+ 233   2        }
+ 234   1      }
+ 235          main()
+ 236          {
+ 237   1        unsigned char flag=0;
+ 238   1        BUZ=0;
+ 239   1        FAN=0;
+ 240   1        GAS=1;
+ 241   1        LDR=0;
+C51 COMPILER V9.53.0.0   HSA                                                               04/20/2018 13:14:19 PAGE 5   
+
+ 242   1        PIR=0;
+ 243   1        TMP=0;
+ 244   1        WND=1;
+ 245   1        BUZ=0;
+ 246   1        GAS_LED=0;
+ 247   1        TMP_LED=0;
+ 248   1        INTR_LED=0;
+ 249   1        SMODE_LED=0;
+ 250   1        WND_LED=0;
+ 251   1        LCD_init();
+ 252   1        Serial_init();
+ 253   1        LCD_cmd(0x01);
+ 254   1        LCD_cmd(0x80);
+ 255   1        LCD_str("Booting...",1);
+ 256   1        delay_ms(1000);
+ 257   1        LCD_cmd(0x01);
+ 258   1        LCD_cmd(0x80);
+ 259   1        LCD_str("TURNING ON",1);
+ 260   1        LCD_cmd(0xc0);
+ 261   1        LCD_str("AUTOMATION MODE",1);
+ 262   1        delay_ms(1000);
+ 263   1        Serial_Tx_str("ATE0");
+ 264   1        delay_ms(50);
+ 265   1        while(1)
+ 266   1        {
+ 267   2          SMODE_LED=0;
+ 268   2          if(LDR)
+ 269   2          {
+ 270   3            AMODE_LED=0;
+ 271   3            LCD_cmd(0x01);
+ 272   3            LCD_cmd(0x80);
+ 273   3            LCD_str("TURNING OFF",1);
+ 274   3            LCD_cmd(0xc0);
+ 275   3            LCD_str("AUTOMATION MODE",1);
+ 276   3            delay_ms(1000);
+ 277   3            security(0);
+ 278   3            LCD_cmd(0x01);
+ 279   3            LCD_cmd(0x80);
+ 280   3            LCD_str("TURNING ON",1);
+ 281   3            LCD_cmd(0xc0);
+ 282   3            LCD_str("AUTOMATION MODE",1);
+ 283   3            delay_ms(1000);
+ 284   3          }
+ 285   2          if(RI==1)
+ 286   2          {
+ 287   3            if(Serial_Rx()=='R')
+ 288   3              if(Serial_Rx()=='I')
+ 289   3                if(Serial_Rx()=='N')
+ 290   3                  if(Serial_Rx()=='G')
+ 291   3                  {
+ 292   4                    AMODE_LED=0;
+ 293   4                    LCD_cmd(0x01);
+ 294   4                    LCD_cmd(0x80);
+ 295   4                    LCD_str("TURNING OFF",1);
+ 296   4                    LCD_cmd(0xc0);
+ 297   4                    LCD_str("AUTOMATION MODE",1);
+ 298   4                    delay_ms(1000);
+ 299   4                    security(1);
+ 300   4                    LCD_cmd(0x01);
+ 301   4                    LCD_cmd(0x80);
+ 302   4                    LCD_str("TURNING ON",1);
+ 303   4                    LCD_cmd(0xc0);
+C51 COMPILER V9.53.0.0   HSA                                                               04/20/2018 13:14:19 PAGE 6   
+
+ 304   4                    LCD_str("AUTOMATION MODE",1);
+ 305   4                    delay_ms(1000);
+ 306   4                  }       
+ 307   3          }
+ 308   2          f=readDS1621();
+ 309   2          if(!PIR && GAS && f<=35.0f)
+ 310   2          {
+ 311   3            if(f<=33.0f)
+ 312   3            {
+ 313   4              FAN=0;
+ 314   4              TMP_LED=0;
+ 315   4            }
+ 316   3            AMODE_LED=1;
+ 317   3            GAS_LED=0;
+ 318   3            BUZ=0;
+ 319   3            if(flag==0)
+ 320   3              LCD_cmd(0x01);
+ 321   3            LCD_cmd(0x80);
+ 322   3            LCD_str("AUTOMATION ON",0);
+ 323   3            LCD_cmd(0xc0);
+ 324   3            LCD_str("RELAX YOUR SELF",0);
+ 325   3            flag=1;
+ 326   3            delay_ms(25);
+ 327   3          }
+ 328   2          else
+ 329   2          {
+ 330   3            if(PIR)
+ 331   3            {
+ 332   4              BUZ=1;
+ 333   4              LCD_cmd(0x01);
+ 334   4              LCD_cmd(0x81);
+ 335   4              LCD_str("SOME ONE WANTS",1);
+ 336   4              LCD_cmd(0xc2);
+ 337   4              LCD_str("TO MEET YOU",1);
+ 338   4              if(f<=33.0f)
+ 339   4              {
+ 340   5                TMP_LED=0;
+ 341   5                FAN=0;
+ 342   5              }
+ 343   4              if(GAS)
+ 344   4              {
+ 345   5                GAS_LED=0;
+ 346   5                BUZ=0;
+ 347   5              }
+ 348   4              flag=0;
+ 349   4              delay_ms(100);
+ 350   4            }
+ 351   3            if(f>35.0f)
+ 352   3            {
+ 353   4              TMP_LED=1;
+ 354   4              FAN=1;
+ 355   4              LCD_cmd(0x01);
+ 356   4              LCD_cmd(0x81);
+ 357   4              LCD_str("TEMPERATURE IS",1);
+ 358   4              LCD_cmd(0xc3);
+ 359   4              LCD_str("HIGH",1);
+ 360   4              LCD_cmd(0xc8);
+ 361   4              LCD_str(f2str(f),1);
+ 362   4              if(!PIR)
+ 363   4              {
+ 364   5                BUZ=0;
+ 365   5              }
+C51 COMPILER V9.53.0.0   HSA                                                               04/20/2018 13:14:19 PAGE 7   
+
+ 366   4              if(GAS)
+ 367   4              {
+ 368   5                GAS_LED=0;
+ 369   5                BUZ=0;
+ 370   5              }
+ 371   4              flag=0;
+ 372   4              delay_ms(100);
+ 373   4            }
+ 374   3            if(!GAS)
+ 375   3            {
+ 376   4              GAS_LED=1;
+ 377   4              BUZ=1;
+ 378   4              LCD_cmd(0x01);
+ 379   4              LCD_cmd(0x82);
+ 380   4              LCD_str("GAS,SMOKE IS",1);
+ 381   4              LCD_cmd(0xc0);
+ 382   4              LCD_str("DETECTED IN HOME",1);
+ 383   4              if(!PIR)
+ 384   4              {
+ 385   5                BUZ=0;
+ 386   5              }
+ 387   4              if(f<=33.0f)
+ 388   4              {
+ 389   5                TMP_LED=0;
+ 390   5                FAN=0;
+ 391   5              }
+ 392   4              flag=0;
+ 393   4              delay_ms(100);
+ 394   4            }
+ 395   3          }
+ 396   2          if(WND)
+ 397   2          {
+ 398   3            WND_LED=0;
+ 399   3          }
+ 400   2          else
+ 401   2          {
+ 402   3            WND_LED=1;
+ 403   3          }
+ 404   2        }
+ 405   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1686    ----
+   CONSTANT SIZE    =    412    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4      13
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       6
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
